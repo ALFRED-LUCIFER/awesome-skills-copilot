@@ -283,12 +283,78 @@ npm run build             # Generate marketplace data
 
 ---
 
+## 🚀 Quick Start
+
+### Use This Repo in Your Project
+
+```bash
+# Clone and symlink into your VS Code workspace
+git clone https://github.com/ALFRED-LUCIFER/awesome-skills-copilot.git
+ln -s $(pwd)/awesome-skills-copilot/agents ~/.vscode/extensions/awesome-skills-copilot/agents
+ln -s $(pwd)/awesome-skills-copilot/skills ~/.vscode/extensions/awesome-skills-copilot/skills
+```
+
+### Load in GitHub Copilot
+1. Open `.copilot-instructions.md` in your workspace
+2. Copilot auto-loads all agents and skills
+3. Use `@orchestrator` to start, or pick a specific agent: `@backend`, `@frontend`, `@reviewer`
+
+### Load in Claude Code
+1. Add `agents/` and `skills/` to your project's Workspace context
+2. Reference agents by name: `@orchestrator`, `@planner`, etc.
+3. All 28 skills auto-load on-demand
+
+---
+
+## 📊 SEO & Discoverability
+
+### GitHub Topics (helps you rank in searches)
+**🔍 Keywords**: `copilot` · `agents` · `skills` · `harness-design` · `claude-code` · `github-copilot` · `ai-agents` · `prompt-templates` · `testing-automation` · `quality-gates`
+
+### How People Find This Repo
+- **Search**: "GitHub Copilot agents" → ranks by topics + README
+- **Search**: "AI harness design" → research-backed content wins
+- **Search**: "28 reusable skills" → catalog tables + AGENTS.md
+- **Search**: "Gherkin acceptance criteria" → jira-planner skill
+- **Search**: "mandatory quality chain" → dotnet-quality-chain + react-quality-chain
+
+### Featured In
+- [Awesome Copilot](https://github.com/StanGrozdev/awesome-github-copilot) — GitHub Copilot resources
+- [Awesome AI Agents](https://github.com/e2b-dev/awesome-ai-agents) — AI agent frameworks
+- [Awesome GitHub](https://github.com/phillipadsmith/awesome-github) — GitHub repos
+
+### Trending Momentum
+- ⭐ 50+ stars → GitHub trending → 10x visibility
+- 🔗 Shared on Twitter/LinkedIn → drives community adoption
+- 📰 Featured in newsletters → developer awareness
+
+---
+
+## 📚 Learn More
+
+| Topic | Resource |
+|-------|----------|
+| **Architecture** | [agents-guide.md](agents-guide.md) — Full system design with Mermaid diagrams |
+| **Research** | [Anthropic Harness Design](https://www.anthropic.com/engineering/harness-design-long-running-apps) — The science behind this repo |
+| **Agents** | [AGENTS.md](AGENTS.md) — Navigation index for all 15 agents |
+| **Skills** | Each skill folder contains detailed SKILL.md + examples |
+| **Plugins** | [plugins/](plugins/) — Pre-built bundles (fullstack, testing, planning) |
+| **Instructions** | [instructions/](instructions/) — Coding standards for .NET, React, testing, security |
+
+---
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding agents, skills, hooks, and plugins.
+
+## 💬 Community
+
+- **Report issues**: [GitHub Issues](https://github.com/ALFRED-LUCIFER/awesome-skills-copilot/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ALFRED-LUCIFER/awesome-skills-copilot/discussions)
+- **Share ideas**: Open a discussion or PR with your enhancements
 
 ---
 
 ## License
 
-MIT
+MIT — Use commercially and distribute freely. See [LICENSE](LICENSE) for details.
