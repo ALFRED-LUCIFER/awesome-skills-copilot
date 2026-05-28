@@ -1,0 +1,16 @@
+{
+  "name": "private-copilot-tooling",
+  "version": "3.3.0",
+  "description": "Validation and marketplace tooling for the private-copilot VS Code Copilot plugin.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node eng/validate-plugin.mjs && node eng/validate-skills.mjs",
+    "validate:plugin": "node eng/validate-plugin.mjs",
+    "validate:skills": "node eng/validate-skills.mjs",
+    "marketplace": "node eng/generate-marketplace.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

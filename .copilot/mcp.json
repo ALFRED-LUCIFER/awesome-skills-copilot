@@ -1,0 +1,31 @@
+{
+	"servers": {
+			"jira-azure": {
+			// Connects to Azure MCP server using API key + your Jira PAT.
+			// No OAuth or local server needed. VS Code connects directly.
+			// - X-Api-Key: shared secret set as MCP_API_KEY on Azure App Service
+			// - X-Jira-Pat: your personal Jira PAT (operations run as your identity)
+			// To use the service account instead, remove the X-Jira-Pat header.
+			"type": "http",
+			"url": "https://your-jira-mcp.azurewebsites.net/mcp",
+			"headers": {
+			"X-Api-Key": "${MCP_JIRA_API_KEY}",
+			"X-Jira-Pat": "${MCP_JIRA_PAT}",
+				"X-Default-Project": "NG"
+			}		
+		},
+		"confluence-azure": {
+			// Connects to Azure MCP server using API key + your confluence PAT.
+			// No OAuth or local server needed. VS Code connects directly.
+			// - X-Api-Key: shared secret set as MCP_API_KEY on Azure App Service
+			// - X-Confluence-Pat: your personal Confluence PAT (operations run as your identity)
+			// To use the service account instead, remove the X-Confluence-Pat header.
+			"type": "http",
+			"url": "https://your-confluence-mcp.azurewebsites.net/mcp",
+			"headers": {
+			"X-Api-Key": "${MCP_CONFLUENCE_API_KEY}",
+			"X-Confluence-Pat": "${MCP_CONFLUENCE_PAT}"
+			}
+		}
+	}
+}

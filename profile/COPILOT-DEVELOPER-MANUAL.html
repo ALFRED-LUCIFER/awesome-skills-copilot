@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copilot Agent System — Copilot Agent System · Developer Manual</title>
+<style>
+/* ===== Org Corporate Design ===== */
+:root {
+  --myorg-violet: rgb(136,27,76);
+  --myorg-gray-70: rgb(119,129,135);
+  --myorg-gray-30: rgb(196,202,206);
+  --myorg-blue: rgb(53,99,162);
+  --myorg-yellowgreen: rgb(187,201,52);
+  --myorg-darkgray: rgb(60,69,75);
+  --myorg-white: #ffffff;
+  --myorg-light-bg: #f8f9fa;
+  --nav-width: 280px;
+  --header-height: 64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; color: var(--myorg-darkgray);
+  background: var(--myorg-white);
+}
+
+/* ===== Header ===== */
+.doc-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-height); background: var(--myorg-violet);
+  display: flex; align-items: center; padding: 0 24px; gap: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.doc-header .logo { height: 36px; flex-shrink: 0; }
+.doc-header .logo svg { height: 36px; width: auto; }
+.doc-header .product-title {
+  color: var(--myorg-white); font-size: 18px; font-weight: 500;
+  margin-left: 16px; flex-shrink: 0;
+}
+.doc-header .spacer { flex: 1; }
+.doc-header select, .doc-header input, .doc-header button {
+  height: 34px; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px;
+  background: rgba(255,255,255,0.15); color: var(--myorg-white);
+  padding: 0 10px; font-size: 13px; outline: none;
+}
+.doc-header select option { color: var(--myorg-darkgray); background: white; }
+.doc-header input::placeholder { color: rgba(255,255,255,0.6); }
+.doc-header button { cursor: pointer; background: var(--myorg-yellowgreen); color: var(--myorg-darkgray);
+  border-color: var(--myorg-yellowgreen); font-weight: 500; padding: 0 16px; }
+.doc-header button:hover { opacity: 0.9; }
+.doc-header button:focus-visible, .doc-header select:focus-visible, .doc-header input:focus-visible {
+  outline: 2px solid var(--myorg-yellowgreen); outline-offset: 2px;
+}
+
+/* ===== Navigation ===== */
+.doc-nav {
+  position: fixed; top: var(--header-height); left: 0; bottom: 0;
+  width: var(--nav-width); background: var(--myorg-light-bg);
+  border-right: 1px solid var(--myorg-gray-30); overflow-y: auto;
+  padding: 16px 0; z-index: 50;
+}
+.doc-nav a {
+  display: block; padding: 8px 20px; color: var(--myorg-darkgray);
+  text-decoration: none; font-size: 14px; border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.doc-nav a:hover { background: rgba(136,27,76,0.06); color: var(--myorg-violet); }
+.doc-nav a.active { border-left-color: var(--myorg-violet); color: var(--myorg-violet); font-weight: 500; }
+.doc-nav a.sub { padding-left: 36px; font-size: 13px; }
+.doc-nav a:focus-visible { outline: 2px solid var(--myorg-violet); outline-offset: -2px; }
+
+/* ===== Main Content ===== */
+.doc-main {
+  margin-left: var(--nav-width); margin-top: var(--header-height);
+  padding: 32px 48px 80px; max-width: 960px;
+}
+.doc-main section { margin-bottom: 48px; }
+.doc-main h1 { font-size: 28px; color: var(--myorg-violet); margin-bottom: 8px; border-bottom: 2px solid var(--myorg-violet); padding-bottom: 8px; }
+.doc-main h2 { font-size: 22px; color: var(--myorg-violet); margin: 32px 0 12px; }
+.doc-main h3 { font-size: 17px; color: var(--myorg-darkgray); margin: 20px 0 8px; }
+.doc-main p, .doc-main li { margin-bottom: 8px; color: var(--myorg-darkgray); }
+.doc-main ul, .doc-main ol { padding-left: 24px; }
+.doc-main table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+.doc-main th { background: var(--myorg-violet); color: white; text-align: left; padding: 10px 12px; }
+.doc-main td { padding: 8px 12px; border-bottom: 1px solid var(--myorg-gray-30); }
+.doc-main tr:hover td { background: rgba(136,27,76,0.03); }
+.doc-main code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 13px; background: #f0f2f4; border: 1px solid var(--myorg-gray-30);
+  border-radius: 4px; padding: 1px 5px;
+}
+.doc-main pre {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 13px; background: #0d1117; color: #e6edf3;
+  border-radius: 6px; padding: 14px 16px; margin: 12px 0;
+  overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;
+}
+.doc-main pre code { background: none; border: none; padding: 0; color: inherit; font-size: inherit; }
+.doc-main pre .comment { color: #8b949e; }
+.doc-main a { color: var(--myorg-blue); text-decoration: none; }
+.doc-main a:hover { text-decoration: underline; }
+
+/* Meta box */
+.meta-box {
+  background: var(--myorg-light-bg); border: 1px solid var(--myorg-gray-30);
+  border-left: 4px solid var(--myorg-violet); border-radius: 4px;
+  padding: 16px 20px; margin-bottom: 32px; font-size: 13px;
+}
+.meta-box dt { font-weight: 600; display: inline; }
+.meta-box dd { display: inline; margin: 0 24px 0 4px; }
+
+/* Workflow steps */
+.step { display: flex; gap: 12px; margin: 12px 0; }
+.step-num {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--myorg-blue); color: white; font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-content { flex: 1; }
+
+/* Warning/Info boxes */
+.box-warning, .box-info, .box-success {
+  border-radius: 4px; padding: 12px 16px; margin: 16px 0; font-size: 14px;
+}
+.box-warning { background: #fff3e0; border-left: 4px solid #ff9800; }
+.box-info { background: #e3f2fd; border-left: 4px solid var(--myorg-blue); }
+.box-success { background: #e8f5e9; border-left: 4px solid #4caf50; }
+
+/* Role pills */
+.role-pill {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 12px; margin-right: 4px;
+}
+.role-dev { background: #ddf4ff; color: #0550ae; border: 1px solid #b6e3ff; }
+.role-lead { background: #fff1e5; color: #bc4c00; border: 1px solid #ffd8b5; }
+.role-po { background: #dafbe1; color: #116329; border: 1px solid #aceebb; }
+.role-pm { background: #f3f0ff; color: #512a97; border: 1px solid #d8b4fe; }
+
+/* Card */
+.card {
+  border: 1px solid var(--myorg-gray-30); border-radius: 8px;
+  padding: 16px; margin: 12px 0; background: var(--myorg-light-bg);
+}
+.card-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: var(--myorg-violet); }
+.card-desc { font-size: 13px; color: var(--myorg-gray-70); margin-bottom: 8px; }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+
+/* Severity chips */
+.sev { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; margin-right: 4px; }
+.sev-crit { background: #ffebe9; color: #cf222e; border: 1px solid #ffc1ba; }
+.sev-high { background: #fff1e5; color: #9a6700; border: 1px solid #ffd8b5; }
+.sev-med { background: #fff8c5; color: #6e5a00; border: 1px solid #ffe57a; }
+.sev-info { background: #ddf4ff; color: #0969da; border: 1px solid #b6e3ff; }
+
+/* Status indicators */
+.dot-green { color: #1a7f37; } .dot-amber { color: #9a6700; } .dot-red { color: #cf222e; } .dot-blue { color: #0969da; }
+
+/* Kbd */
+kbd {
+  display: inline-block; background: #f0f2f4; border: 1px solid var(--myorg-gray-30);
+  border-bottom: 2px solid var(--myorg-gray-30); border-radius: 4px;
+  padding: 1px 5px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px;
+}
+
+/* Flow diagram */
+.flow {
+  font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px;
+  background: #0d1117; color: #e6edf3; border-radius: 6px;
+  padding: 14px 16px; line-height: 1.7; margin: 12px 0; white-space: pre; overflow-x: auto;
+}
+
+/* Footer */
+.doc-footer {
+  margin-left: var(--nav-width); padding: 24px 48px;
+  border-top: 1px solid var(--myorg-gray-30); font-size: 12px;
+  color: var(--myorg-gray-70);
+}
+
+/* Print */
+@media print {
+  .doc-header, .doc-nav, .no-print { display: none !important; }
+  .doc-main { margin: 0; padding: 20px; max-width: 100%; }
+  .doc-footer { margin: 0; }
+  body { font-size: 12px; }
+  .doc-main h1 { font-size: 22px; }
+  .doc-main h2 { font-size: 18px; break-after: avoid; }
+  .doc-main table { font-size: 11px; }
+  section { break-inside: avoid; }
+}
+
+/* Search highlight */
+mark { background: var(--myorg-yellowgreen); padding: 1px 3px; border-radius: 2px; }
+
+/* ===== Persona Flows ===== */
+.persona-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+}
+.persona-label-dev { background: #ddf4ff; color: #0550ae; border: 1px solid #b6e3ff; }
+.persona-label-po  { background: #dafbe1; color: #116329; border: 1px solid #aceebb; }
+.mermaid-wrap {
+  background: var(--myorg-light-bg); border: 1px solid var(--myorg-gray-30);
+  border-radius: 8px; padding: 20px; margin: 12px 0 24px; overflow-x: auto; text-align: center;
+}
+.mermaid-wrap svg { max-width: 100%; height: auto; }
+.persona-handoff {
+  background: #fff8c5; border-left: 4px solid #d4ac0d;
+  border-radius: 4px; padding: 14px 16px; margin: 16px 0; font-size: 13px;
+}
+.persona-handoff strong { display: block; margin-bottom: 6px; font-size: 14px; }
+.persona-handoff ol { margin: 8px 0 0 18px; }
+.persona-handoff li { margin-bottom: 4px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Mermaid — neutral base, classDef controls colours
+  if (window.mermaid) {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#f0f2f4',
+        primaryTextColor: '#3c454b',
+        primaryBorderColor: '#c4cacf',
+        lineColor: '#3c454b',
+        edgeLabelBackground: '#ffffff',
+        fontSize: '14px'
+      }
+    });
+  }
+  // Search
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      const sections = document.querySelectorAll('.doc-main section');
+      sections.forEach(function(sec) {
+        if (!query) { sec.style.display = ''; return; }
+        sec.style.display = sec.textContent.toLowerCase().includes(query) ? '' : 'none';
+      });
+    });
+  }
+  // Nav active state
+  const navLinks = document.querySelectorAll('.doc-nav a');
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+  // Print
+  const printBtn = document.getElementById('printBtn');
+  if (printBtn) { printBtn.addEventListener('click', function() { window.print(); }); }
+});
+</script>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="doc-header">
+  <div class="logo" aria-label="Org">
+    <svg width="55" height="16" viewBox="0 0 55 16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Org logo"><mask id="mask0_2738_550" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="55" height="16"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.588013 0.059021H54.4017V15.0583H0.588013V0.059021Z" fill="white"/></mask><g mask="url(#mask0_2738_550)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.1562 11.0393H5.7846L8.66821 0.458631C8.6716 0.431541 8.67456 0.389631 8.67456 0.370581C8.67456 0.211841 8.55773 0.085691 8.4066 0.059021H4.94855C4.7297 0.065791 4.55699 0.221151 4.50746 0.426881L0.596473 14.7658L0.598593 14.7666C0.594363 14.7844 0.588013 14.8009 0.588013 14.82C0.588013 14.9461 0.686643 15.0473 0.811103 15.0574H9.3307C9.41367 15.0363 9.48098 14.9817 9.52119 14.908L10.4673 11.4669L10.4656 11.4661C10.4703 11.4445 10.4741 11.3839 10.4741 11.3611C10.4741 11.185 10.3319 11.0419 10.1562 11.0394" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.1039 3.6576L14.1043 3.65802H17.6839C17.7969 3.64151 17.8858 3.56531 17.9247 3.46118L18.7578 0.421371C18.7587 0.403591 18.7599 0.385811 18.7599 0.376081C18.7599 0.207181 18.6287 0.072991 18.4636 0.059021H15.0394C14.843 0.059021 14.6864 0.182201 14.614 0.351951L13.8072 3.28509C13.8063 3.3143 13.8051 3.33927 13.8051 3.34562C13.8051 3.5141 13.938 3.64914 14.1039 3.6576" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M17.4475 5.19669C17.4517 5.1751 17.4559 5.11499 17.4559 5.09213C17.4559 4.91392 17.3116 4.76957 17.1334 4.76957H17.1325V4.76703H13.6973C13.5073 4.79116 13.3595 4.92535 13.307 5.1061L10.644 14.7894C10.6414 14.7995 10.6381 14.8093 10.6381 14.8199C10.6381 14.9464 10.7367 15.0476 10.8611 15.0578L13.7096 15.0586L13.71 15.0578H14.58C14.693 15.0413 14.7814 14.9651 14.8208 14.8609L15.6539 11.8207C15.6543 11.8156 15.6543 11.8118 15.6543 11.8067L17.4496 5.19753L17.4475 5.19669Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M28.5646 7.55377C28.3428 7.02167 27.9876 6.6229 27.613 6.34479C27.0407 5.9219 26.44 5.74411 25.9655 5.64759C25.4939 5.55446 25.1518 5.55023 25.0469 5.54896L23.6021 5.54981C22.6111 5.54981 22.8647 4.07753 23.8722 4.07753L23.9073 4.07795H25.8812H29.9078C30.0153 4.04874 30.0987 3.96493 30.1275 3.85571H30.1296L31.063 0.441271C31.0651 0.415871 31.0676 0.389631 31.0676 0.374811C31.0676 0.208871 30.9398 0.076801 30.7785 0.059021H27.787H26.0188H25.1095C24.1989 0.099661 23.4171 0.270681 22.565 0.623721C21.8737 0.916231 21.0516 1.40262 20.3269 2.154C19.6009 2.89945 19.0409 3.87519 18.7674 4.89749C18.4842 5.9109 18.5177 6.85743 18.8195 7.56309C19.0409 8.0952 19.3956 8.49438 19.7702 8.7725C20.343 9.19497 20.9437 9.37276 21.4186 9.47012C21.8877 9.56282 22.2297 9.56706 22.3364 9.5679L23.7536 9.56875L23.7989 9.57256C24.2108 9.60473 24.4622 9.9637 24.3518 10.368C24.2641 10.6884 23.9788 10.9335 23.669 11.0135C23.6114 11.0275 23.5437 11.0398 23.4658 11.0393H20.5944V11.0381H17.4679C17.3599 11.0677 17.2761 11.1519 17.2477 11.2607H17.246L16.3122 14.6756C16.3101 14.701 16.308 14.7273 16.308 14.7421C16.308 14.9076 16.4354 15.0397 16.5967 15.0579H19.5019H20.4569H22.2678C23.1796 15.0113 23.964 14.847 24.8191 14.4932C25.5104 14.2006 26.3329 13.7143 27.0568 12.9625C27.7823 12.2174 28.3432 11.2417 28.6158 10.2207C28.8999 9.20597 28.866 8.25944 28.5646 7.55378" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M40.342 5.84063H35.1911L35.6712 4.07795H41.3033C41.4113 4.04874 41.4951 3.9645 41.5235 3.85529L41.5252 3.85571L42.459 0.441271C42.4611 0.415871 42.4632 0.389201 42.4632 0.374391C42.4632 0.208451 42.3358 0.076801 42.1745 0.059021H36.3645H33.9398H32.9404C32.7435 0.059021 32.5873 0.182631 32.5149 0.351951L28.5828 14.803C28.5819 14.8085 28.579 14.8132 28.579 14.8195C28.579 14.947 28.6785 15.0477 28.8029 15.0579H38.3122C38.4202 15.0287 38.5036 14.944 38.5323 14.8356H38.534L39.4679 11.4212C39.4696 11.3958 39.4721 11.3695 39.4721 11.3547C39.4721 11.1884 39.3443 11.0567 39.1834 11.0389H33.7752L34.2552 9.27624H39.6643C39.7528 9.25253 39.8226 9.19073 39.8616 9.10818L40.6443 6.23473C40.6472 6.20806 40.6493 6.17631 40.6493 6.1598C40.6493 5.98751 40.513 5.84909 40.342 5.84062" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M54.1132 0.059021H49.2312C48.23 0.103891 47.3716 0.291841 46.4365 0.680021C45.6779 1.00131 44.7771 1.53681 43.9855 2.36269C43.2227 3.15005 42.6296 4.17193 42.3235 5.24715C42.3113 5.29117 41.0722 9.8782 41.0608 9.92222C40.7556 11.0368 40.7979 12.0777 41.134 12.8537C41.3813 13.4387 41.7741 13.8777 42.1877 14.1833C42.8197 14.6477 43.4822 14.8437 44.0041 14.9503C44.2852 15.0058 44.5222 15.0316 44.7013 15.0447L44.7017 15.0524H44.827C44.9121 15.0562 44.9773 15.0574 45.0145 15.0579L45.0154 15.0524H50.8296C50.9371 15.0227 51.0209 14.9389 51.0493 14.8297L51.0514 14.8301L51.9848 11.4153C51.9869 11.3903 51.9891 11.3636 51.9891 11.3488C51.9891 11.1829 51.8621 11.0508 51.7004 11.0334H45.7075C45.1449 11.0334 44.9443 10.6016 45.0353 10.1843C45.0408 10.1593 46.1609 6.07685 46.1685 6.05188C46.7218 4.19777 48.4675 4.08474 49.0932 4.07797H53.2421C53.35 4.04876 53.4334 3.96452 53.4622 3.85531L53.4639 3.85573L54.3977 0.440861C54.3998 0.415881 54.4019 0.389221 54.4019 0.374401C54.4019 0.208461 54.2745 0.076811 54.1132 0.059031" fill="white"/></g></svg>
+  </div>
+  <span class="product-title">Copilot Agent System — Developer Manual</span>
+  <div class="spacer"></div>
+  <form role="search" style="display:contents">
+    <input type="search" id="searchInput" placeholder="Search documentation" aria-label="Search documentation" autocomplete="off" />
+  </form>
+  <button id="printBtn" type="button" aria-label="Print or save as PDF">🖨 Print / PDF</button>
+</header>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="doc-nav" aria-label="Document navigation">
+  <a href="#sec-overview">A. Overview</a>
+  <a href="#sec-setup" class="sub">A.1 Prerequisites</a>
+  <a href="#sec-clone" class="sub">A.2 Clone &amp; Configure</a>
+  <a href="#sec-sharing" class="sub">A.3 Sharing Model</a>
+  <a href="#sec-quickstart">B. Quick Start</a>
+  <a href="#sec-open-chat" class="sub">B.1 Open Copilot Chat</a>
+  <a href="#sec-cheatsheet" class="sub">B.2 Cheatsheet</a>
+  <a href="#sec-commands">C. Slash Commands</a>
+  <a href="#sec-cmd-dev" class="sub">C.1 Developer</a>
+  <a href="#sec-cmd-lead" class="sub">C.2 Tech Lead</a>
+  <a href="#sec-cmd-po" class="sub">C.3 Product Owner / BA</a>
+  <a href="#sec-cmd-pm" class="sub">C.4 Scrum Master / PM</a>
+  <a href="#sec-cmd-docs" class="sub">C.5 Documentation</a>
+  <a href="#sec-agents">D. Agents</a>
+  <a href="#sec-orchestrator" class="sub">D.1 Orchestrator</a>
+  <a href="#sec-planners" class="sub">D.2 Planners</a>
+  <a href="#sec-builders" class="sub">D.3 Builders &amp; Reviewer</a>
+  <a href="#sec-knowledge" class="sub">D.4 Knowledge</a>
+  <a href="#sec-workers" class="sub">D.5 Hidden Workers</a>
+  <a href="#sec-reviewer-modes" class="sub">D.6 Reviewer — Modes &amp; Panel</a>
+  <a href="#sec-chains">E. Quality Chains</a>
+  <a href="#sec-chain-be" class="sub">E.1 Backend Chain</a>
+  <a href="#sec-chain-fe" class="sub">E.2 Frontend Chain</a>
+  <a href="#sec-chain-fs" class="sub">E.3 Full-Stack Chain</a>
+  <a href="#sec-post-edit" class="sub">E.4 Post-Edit Gate</a>
+  <a href="#sec-handoffs" class="sub">E.5 Handoff Buttons</a>
+  <a href="#sec-recipes">F. Workflow Recipes</a>
+  <a href="#sec-memory">F.2 Memory &amp; Context</a>
+  <a href="#sec-knowledge-base" class="sub">F.3 Knowledge Base</a>
+  <a href="#sec-memory-layers" class="sub">F.2a Two-Layer Architecture</a>
+  <a href="#sec-memory-hooks" class="sub">F.2b Session Hooks</a>
+  <a href="#sec-memory-tips" class="sub">F.2c Best Practices</a>
+  <a href="#sec-skills">G. Skills &amp; Prompts</a>
+  <a href="#sec-skills-overview" class="sub">G.1 All 28 Skills</a>
+  <a href="#sec-skill-backend" class="sub">G.1a Backend Skills (7)</a>
+  <a href="#sec-skill-frontend" class="sub">G.1b Frontend Skills (5)</a>
+  <a href="#sec-skill-quality" class="sub">G.1c Quality &amp; Review (4)</a>
+  <a href="#sec-skill-jira" class="sub">G.1d Jira &amp; Gherkin (4)</a>
+  <a href="#sec-skill-docs" class="sub">G.1e Documentation (4)</a>
+  <a href="#sec-skill-devtools" class="sub">G.1f Dev Tools (2)</a>
+  <a href="#sec-knowledge-init" class="sub">G.1g Knowledge Base (1)</a>
+  <a href="#sec-prompts-overview" class="sub">G.2 All 15 Prompts</a>
+  <a href="#sec-hooks">G.3 Hooks (5)</a>
+  <a href="#sec-mcp">H. MCP Servers</a>
+  <a href="#sec-mcp-jira" class="sub">H.1 Jira MCP</a>
+  <a href="#sec-mcp-confluence" class="sub">H.2 Confluence MCP</a>
+  <a href="#sec-mcp-setup" class="sub">H.3 Environment Setup</a>
+  <a href="#sec-instructions">I. Instruction Files</a>
+  <a href="#sec-thresholds">J. Quality Thresholds</a>
+  <a href="#sec-gherkin">K. Gherkin Rules</a>
+  <a href="#sec-troubleshooting">L. Troubleshooting</a>
+  <a href="#sec-personas">N. Persona Flows</a>
+  <a href="#sec-persona-dev" class="sub">N.1 Developer</a>
+  <a href="#sec-persona-po" class="sub">N.2 Product Owner / BA</a>
+  <a href="#sec-summary">M. Summary Tables</a>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="doc-main">
+
+<!-- ══════ A. OVERVIEW ══════ -->
+<section id="sec-overview">
+<h1>A. Overview</h1>
+<dl class="meta-box">
+  <dt>Version</dt><dd>3.3.0</dd>
+  <dt>Date</dt><dd>May 2026</dd>
+  <dt>Stack</dt><dd>.NET 10 · React 19 · TypeScript · MUI 7</dd>
+  <dt>Agents</dt><dd>14 (Avenger-themed: Jarvis, Friday, Karen, Vision, …)</dd>
+  <dt>Slash Commands</dt><dd>15</dd>
+  <dt>Skills</dt><dd>27 (incl. knowledge-init)</dd>
+  <dt>Hooks</dt><dd>5 (governance-audit, secrets-scanner, session-logger, tool-guardian, knowledge-drift)</dd>
+  <dt>Instruction files</dt><dd>15</dd>
+  <dt>MCP Servers</dt><dd>2 (Jira + Confluence)</dd>
+  <dt>Plugin manifest</dt><dd><code>.github/plugin/plugin.json</code> (name: <code>private-copilot</code>)</dd>
+</dl>
+
+<p>The Copilot Agent System Copilot Agent System is an AI-powered engineering platform shared across all repositories in the Org GitHub Enterprise organization. It provides specialised agents for planning, building, testing, reviewing, and documenting software — all enforced by mandatory quality chains and security guardrails.</p>
+
+<h2 id="sec-setup">A.1 Prerequisites</h2>
+<ul>
+  <li><strong>VS Code</strong> — latest stable version</li>
+  <li><strong>GitHub Copilot extension</strong> — version ≥ 1.250 with Copilot Chat enabled</li>
+  <li><strong>GitHub Enterprise account</strong> — member of the Org organization</li>
+  <li><strong>MCP environment variables</strong> — see <a href="#sec-mcp-setup">section H.3</a> for Jira/Confluence integration</li>
+</ul>
+
+<h2 id="sec-clone">A.2 Install the VS Code Copilot plugin (recommended)</h2>
+<p>From v2.0.0, this repo is packaged as the <code>private-copilot</code> VS Code Copilot plugin (manifest at <code>.github/plugin/plugin.json</code>). Install registers all 14 Avenger-themed agents, 26 skills, and 4 hooks in one step.</p>
+<ol>
+  <li>VS Code → Command Palette → <strong>Chat: Install Plugin From Source</strong>.</li>
+  <li>Paste the Git URL of <code>.github-private</code>.</li>
+  <li>Reload VS Code when prompted.</li>
+  <li>Add one line to user <code>settings.json</code> so the 14 prompts register:
+    <pre><code>"chat.promptFilesLocations": {
+  "${userHome}/.vscode/extensions/private-copilot-*/prompts": true
+}</code></pre>
+  </li>
+</ol>
+<p>Validate before pushing changes to the plugin: <code>npm run validate</code> (filename ↔ <code>name:</code> parity, <code>plugin.json</code> schema, skill manifests).</p>
+
+<h2 id="sec-clone-legacy">A.2-Legacy · Clone &amp; symlink (pre-plugin workflow, still supported)</h2>
+<p>Agents are also shared organization-wide via GitHub enterprise REST discovery. The clone-and-symlink path remains supported for users who prefer not to install the plugin.</p>
+
+<h3>Step 1 — Clone this repository</h3>
+<pre><code>git clone https://myorg-com.ghe.com/myorg/.github-private.git ~/myorg-copilot-config</code></pre>
+
+<h3>Step 2 — Symlink prompts and skills to your user folder</h3>
+<p>This makes all slash commands and skills available in every workspace, even without org-level sharing:</p>
+<pre><code><span class="comment"># macOS / Linux</span>
+ln -s ~/myorg-copilot-config/prompts ~/.vscode/prompts
+ln -s ~/myorg-copilot-config/skills  ~/.vscode/skills
+
+<span class="comment"># Windows (PowerShell as Admin)</span>
+New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.vscode\prompts" -Target "$env:USERPROFILE\myorg-copilot-config\prompts"
+New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.vscode\skills"  -Target "$env:USERPROFILE\myorg-copilot-config\skills"</code></pre>
+
+<h3>Step 3 — Update VS Code settings</h3>
+<p>Add the following to your <strong>User Settings</strong> (<kbd>Cmd</kbd>+<kbd>,</kbd> → Open Settings JSON):</p>
+<pre><code>{
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".github/prompts": true,
+    "~/.vscode/prompts": true
+  },
+  "github.copilot.chat.codesearch.enabled": true,
+  "chat.mcp.access": "all"
+}</code></pre>
+
+<div class="box-info">
+  <strong>Organization sharing:</strong> Agents (<code>agents/</code>) are fully shared at the organization level — they appear for all members automatically. Prompts and skills are also org-shared, but symlinking gives you local access for offline use and faster loading.
+</div>
+
+<h2 id="sec-sharing">A.3 Sharing Model</h2>
+<table>
+  <thead><tr><th>Asset Type</th><th>Location</th><th>Sharing Scope</th><th>Local Override</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Agents</strong></td><td><code>.github-private/agents/</code></td><td>Organization-wide (automatic)</td><td>Not needed — always available</td></tr>
+    <tr><td><strong>Prompts</strong></td><td><code>.github-private/prompts/</code></td><td>Organization-wide + local symlink</td><td>Symlink to <code>~/.vscode/prompts</code></td></tr>
+    <tr><td><strong>Skills</strong></td><td><code>.github-private/skills/</code></td><td>Organization-wide + local symlink</td><td>Symlink to <code>~/.vscode/skills</code></td></tr>
+    <tr><td><strong>Instructions</strong></td><td><code>.github/instructions/</code></td><td>Per-repo (auto-injected by glob)</td><td>Copy to your repo's <code>.github/instructions/</code></td></tr>
+    <tr><td><strong>Guardrails</strong></td><td><code>.github/instructions/GUARDRAILS-*.md</code></td><td>Per-repo (auto-injected)</td><td>Inherited via instruction file copy</td></tr>
+    <tr><td><strong>MCP config</strong></td><td>Organization-level <code>copilot/mcp.json</code></td><td>Organization-wide</td><td>Override in <code>.github/copilot/mcp.json</code></td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════ B. QUICK START ══════ -->
+<section id="sec-quickstart">
+<h1>B. Quick Start</h1>
+
+<div class="box-success">
+  <strong>No agent knowledge required.</strong> Every workflow is accessible through slash commands (<code>/</code>) or by typing <code>@orchestrator</code> in Copilot Chat.
+</div>
+
+<h2 id="sec-open-chat">B.1 Open Copilot Chat</h2>
+<table>
+  <thead><tr><th>Action</th><th>Keyboard</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Open Copilot Chat panel</td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> (macOS) · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> (Win)</td><td>Main chat — use for agents and slash commands</td></tr>
+    <tr><td>Inline chat in editor</td><td><kbd>Cmd</kbd>+<kbd>I</kbd> (macOS) · <kbd>Ctrl</kbd>+<kbd>I</kbd> (Win)</td><td>Scoped to selected text / current file</td></tr>
+    <tr><td>Quick chat</td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>L</kbd></td><td>Floating input — single questions</td></tr>
+    <tr><td>Invoke slash command</td><td>Type <kbd>/</kbd> in chat</td><td>Shows all 15 registered prompt files</td></tr>
+    <tr><td>Mention an agent</td><td>Type <kbd>@</kbd> in chat</td><td>Shows user-invocable agents only</td></tr>
+  </tbody>
+</table>
+
+<div class="box-warning">
+  <strong>Tip:</strong> If slash commands don't appear, restart VS Code. Commands live in <code>prompts/</code> and are auto-loaded org-wide.
+</div>
+
+<h2 id="sec-cheatsheet">B.2 Cheatsheet</h2>
+<div class="grid-2">
+  <div>
+    <h3>Slash commands — type <code>/</code></h3>
+<pre><code>/explain-project
+/explain-file src/Services/OrderService.cs
+/review-and-fix-code
+/trace-bug            <span class="comment"># paste stack trace</span>
+/describe-pr NG-1234
+/draft-user-story managers want PDF export
+/convert-to-gherkin NG-5678
+/read-jira-ticket NG-5678
+/sprint-status
+/find-confluence-page deployment guide
+/generate-code CRUD for UserPreferences
+/generate-tests                <span class="comment"># active file</span>
+/add-doc-comments                  <span class="comment"># active file</span>
+/optimize-performance             <span class="comment"># active file</span></code></pre>
+  </div>
+  <div>
+    <h3>Agents — type <code>@</code></h3>
+<pre><code><span class="comment"># Feature from Jira ticket</span>
+@orchestrator plan NG-36060
+
+<span class="comment"># Build full-stack feature</span>
+@orchestrator build user preferences CRUD
+
+<span class="comment"># Enrich plan with Confluence</span>
+@docs-planner plan NG-36060
+
+<span class="comment"># Write Confluence docs</span>
+@docs-writer create Frontend Standards page
+
+<span class="comment"># Direct code review</span>
+@reviewer --full src/
+
+<span class="comment"># Plan ticket only (no code)</span>
+@jira-planner plan NG-36060</code></pre>
+  </div>
+</div>
+</section>
+
+<!-- ══════ C. SLASH COMMANDS ══════ -->
+<section id="sec-commands">
+<h1>C. Slash Commands</h1>
+<p>15 slash commands cover the full development lifecycle — from onboarding to PR submission, plus living knowledge base management.</p>
+
+<h2 id="sec-cmd-dev">C.1 Developer Commands</h2>
+
+<div class="card">
+  <div class="card-title"><code>/knowledge-init</code> <span class="role-pill role-dev">Developer</span> <span class="role-pill role-lead">Lead</span></div>
+  <div class="card-desc">Build or refresh a living knowledge base for the current repo — creates per-domain <code>AGENTS.md</code> index files and <code>docs/{domain}.md</code> knowledge documents. LLMs find domain knowledge without exhausting the context window.<br>
+  <strong>Modes:</strong>
+  <ul>
+    <li><code>/knowledge-init</code> — full scan, create all missing files; prompts for optional project metadata (Value Stream, Confluence URL, Jira keys/epics) on first run</li>
+    <li><code>/knowledge-init Orders</code> — scope to one domain folder</li>
+    <li><code>/knowledge-init --update</code> — refresh only stale domains flagged by the <code>knowledge-drift</code> hook</li>
+    <li><code>/knowledge-init --meta-only</code> — update project metadata in <code>docs/INDEX.md</code> only</li>
+  </ul>
+  Companion hook <code>knowledge-drift</code> runs at session end, detects changed source files, and flags stale domains automatically.</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/explain-project</code> <span class="role-pill role-dev">Developer</span> <span class="role-pill role-lead">Lead</span></div>
+  <div class="card-desc">Instant onboarding — summarise any NG repo's stack, architecture, patterns, and test strategy.</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/explain-file</code> <span class="role-pill role-dev">Developer</span></div>
+  <div class="card-desc">Deep-dive any file — purpose, dependencies, callers, test counterpart, relevant guardrails. <br><strong>Arg:</strong> file path, e.g. <code>/explain-file src/Services/OrderService.cs</code></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/review-and-fix-code</code> <span class="role-pill role-dev">Developer</span> <span class="role-pill role-lead">Lead</span></div>
+  <div class="card-desc">Review uncommitted changes across 5 lenses (Correctness · Security · Architecture · Performance · Standards) and fix every issue inline. Severity: <span class="sev sev-crit">Critical 10</span> <span class="sev sev-high">High 5</span> <span class="sev sev-med">Medium 2</span> <span class="sev sev-info">Info 1</span></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/trace-bug</code> <span class="role-pill role-dev">Developer</span></div>
+  <div class="card-desc">Structured root-cause analysis from a pasted stack trace. Ranks causes and suggests file:line fixes.</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/describe-pr</code> <span class="role-pill role-dev">Developer</span></div>
+  <div class="card-desc">Generate PR title + body from git history, optionally enriched with Jira ACs. <br><strong>Arg:</strong> optional <code>NG-xxxx</code></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/generate-code</code> <span class="role-pill role-dev">Developer</span></div>
+  <div class="card-desc">Context-aware code generation — auto-routes to <code>@backend</code> (.NET) or <code>@frontend</code> (React). <br><strong>Arg:</strong> description of what to generate</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/generate-tests</code> <span class="role-pill role-dev">Developer</span></div>
+  <div class="card-desc">Generate unit tests — auto-routes to NUnit (.cs, 95% floor) or Vitest+RTL (.ts/.tsx, 90% floor).</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/add-doc-comments</code> <span class="role-pill role-dev">Developer</span></div>
+  <div class="card-desc">Add XML doc comments (C#) or JSDoc (TypeScript) to public/exported members. No logic changed.</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/optimize-performance</code> <span class="role-pill role-dev">Developer</span> <span class="role-pill role-lead">Lead</span></div>
+  <div class="card-desc">Analyze and fix performance issues — N+1 queries, missing AsNoTracking, re-renders, missing memoization.</div>
+</div>
+
+<h2 id="sec-cmd-lead">C.2 Tech Lead Commands</h2>
+
+<div class="card">
+  <div class="card-title"><code>/update-copilot-instructions</code> <span class="role-pill role-lead">Tech Lead</span></div>
+  <div class="card-desc">Maintain <code>.github/instructions/</code> files. <code>--scan</code> for health check; <code>file §n</code> for targeted section update with diff preview.</div>
+</div>
+
+<h2 id="sec-cmd-po">C.3 Product Owner / BA Commands</h2>
+
+<div class="card">
+  <div class="card-title"><code>/draft-user-story</code> <span class="role-pill role-po">PO</span> <span class="role-pill role-po">BA</span></div>
+  <div class="card-desc">Turn a plain-text idea into a Jira Story with Gherkin ACs (G1–G11), T-shirt estimate, and Epic suggestion. Creates ticket after confirmation.</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/read-jira-ticket</code> <span class="role-pill role-po">PO</span> <span class="role-pill role-dev">Dev</span></div>
+  <div class="card-desc">Fetch any Jira ticket and display as a clean formatted card. <strong>Arg:</strong> <code>NG-xxxx</code></div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/convert-to-gherkin</code> <span class="role-pill role-po">PO</span> <span class="role-pill role-dev">Dev</span></div>
+  <div class="card-desc">Convert Jira ticket description to Gherkin ACs and write back. Smart detection skips already-converted tickets. <strong>Arg:</strong> <code>NG-xxxx</code></div>
+</div>
+
+<h2 id="sec-cmd-pm">C.4 Scrum Master / PM Commands</h2>
+
+<div class="card">
+  <div class="card-title"><code>/sprint-status</code> <span class="role-pill role-pm">SM</span> <span class="role-pill role-pm">PM</span></div>
+  <div class="card-desc">Sprint health snapshot — status breakdown, blockers, unassigned, % done, risk flags. <strong>Arg:</strong> optional sprint name</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/find-confluence-page</code> <span class="role-pill role-pm">PM</span> <span class="role-pill role-dev">Dev</span></div>
+  <div class="card-desc">Quick Confluence search — top 5 results with category context and excerpts. <strong>Arg:</strong> keywords</div>
+</div>
+
+<h2 id="sec-cmd-docs">C.5 Documentation Commands</h2>
+
+<div class="card">
+  <div class="card-title"><code>/update-product-manual</code> <span class="role-pill role-lead">Lead</span></div>
+  <div class="card-desc">Update an existing product manual — gap check → patch → regenerate.</div>
+</div>
+
+<div class="card">
+  <div class="card-title"><code>/product-flow-screenshots</code> <span class="role-pill role-dev">Dev</span></div>
+  <div class="card-desc">Generate/update Cypress screenshot tour of every app screen.</div>
+</div>
+</section>
+
+<!-- ══════ D. AGENTS ══════ -->
+<section id="sec-agents">
+<h1>D. Agents</h1>
+<p>14 agents with clear single responsibilities. The orchestrator delegates to specialised sub-agents through mandatory quality chains.</p>
+
+<h2 id="sec-orchestrator">D.1 Orchestrator — <code>@orchestrator</code></h2>
+<div class="box-success"><strong>Jarvis — Pure delegation orchestrator.</strong> Never plans, codes, or reviews. Classifies intent, delegates to specialists, coordinates chains, and delivers results. Fast-path routes simple commands directly without planning overhead.</div>
+
+<table>
+  <thead><tr><th>Property</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>Role</td><td>Pure delegation: Classify → Delegate → Approve → Execute → Verify → Deliver</td></tr>
+    <tr><td>Model</td><td>Claude Sonnet 4.6</td></tr>
+    <tr><td>Fast-path</td><td>Direct commands (review, test, scaffold) skip planner — route immediately</td></tr>
+    <tr><td>Guardrails</td><td>SEC-1–24, mandatory chains, 90%/95% coverage, workspace-strict routing</td></tr>
+  </tbody>
+</table>
+
+<h3>Invocation examples</h3>
+<pre><code>@orchestrator plan NG-36060              <span class="comment"># Plan from Jira ticket</span>
+@orchestrator build CRUD for UserPreferences with React UI
+@orchestrator build CRUD for UserPreferences — backend only
+@orchestrator scaffold new InventoryManagement microservice
+@orchestrator build user preferences — skip tests  <span class="comment"># logged override</span></code></pre>
+
+<h3>Execution flow</h3>
+<div class="flow">Jarvis (orchestrator)
+  ├── Step 1: CLASSIFY — intent + workspace detection
+  ├── Step 2: DELEGATE TO PLANNER → @planner (Veronica) designs the plan
+  ├── Step 3: APPROVE → "Green light this and I'll get the team moving."
+  ├── Step 4: EXECUTE
+  │     ├── @backend (Friday) → @migration (C.L.U.E.) → @backend-tests (U) → @reviewer (Vision)
+  │     ├── @frontend (Karen) → PARALLEL[@frontend-tests + @e2e-tests] → @reviewer (Vision)
+  │     └── if score > 5: auto-fix → re-review (max 3 iterations)
+  └── Step 5: DELIVER → "All clear. Delivery summary below."
+
+Fast-path (skips planner):
+  "@orchestrator review src/"       → routes directly to @reviewer (Vision)
+  "@orchestrator run backend tests" → routes directly to @backend-tests (U)
+  "@orchestrator scaffold X"        → routes directly to @scaffold (Dum-E)</div>
+
+<h2 id="sec-planners">D.2 Planners</h2>
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title"><code>@planner</code> — Veronica</div>
+    <div class="card-desc">Read-only analysis — produces structured plan with Gherkin ACs, risks, and estimates. No code generation.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><code>@jira-planner</code> — Jocasta</div>
+    <div class="card-desc">Jira read+write — fetches tickets, converts to Gherkin (G1–G14), writes back. Detects all ticket types.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><code>@docs-planner</code> — Mainframe</div>
+    <div class="card-desc">Jira + Confluence bridge — enriches plans with Confluence standards, ADRs, and system design citations.</div>
+  </div>
+</div>
+
+<h2 id="sec-builders">D.3 Builders &amp; Reviewer</h2>
+<table>
+  <thead><tr><th>Agent</th><th>Invocable</th><th>Generates</th></tr></thead>
+  <tbody>
+    <tr><td><code>@backend</code> — Friday</td><td>Yes</td><td>.NET 10 full layer: DTO → Mapping → Repo → Service → Controller → Startup → Constants</td></tr>
+    <tr><td><code>@frontend</code> — Karen</td><td>Yes</td><td>React 19 / MUI 7: Types → Query hooks → Controller hook → Page → Table → Dialog</td></tr>
+    <tr><td><code>@scaffold</code> — Dum-E</td><td>Yes</td><td>.NET 10 microservice skeleton (Program.cs, DbContext, Startup, project files)</td></tr>
+    <tr><td><code>@migration</code> — C.L.U.E.</td><td>Yes</td><td>EF Core migrations — idempotent Up/Down, TenantId scoping, validation SQL</td></tr>
+    <tr><td><code>@reviewer</code> — Vision</td><td>Yes</td><td>7-dimension review (Security · Performance · Readability · Tests · Architecture · Accessibility · Duplication) + multi-model panel + auto-fix loop — <a href="#sec-reviewer-modes">see D.6 for all modes</a></td></tr>
+  </tbody>
+</table>
+
+<h3>Code Reviewer — Direct invocation</h3>
+<pre><code><span class="comment"># Quick quality pass (default)</span>
+@reviewer src/domain/user-preferences/
+
+<span class="comment"># Security-focused</span>
+@reviewer --security src/Controllers/
+
+<span class="comment"># Full pre-PR review with 4-model panel</span>
+@reviewer --full src/
+@reviewer --panel src/
+
+<span class="comment"># Other targeted modes</span>
+@reviewer --performance src/Services/ReportService.cs
+@reviewer --coverage src/domain/machine-filter/
+@reviewer --critique src/domain/new-feature/</code></pre>
+
+<h2 id="sec-knowledge">D.4 Knowledge Agents</h2>
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title"><code>@docs-writer</code> — Hope</div>
+    <div class="card-desc">Confluence page writer — searches for duplicates, previews content, creates with proper labels.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><code>@product-manual</code> — H.O.M.E.R.</div>
+    <div class="card-desc">Standalone HTML product documentation — GPSR, PLD, and CRA compliance. Uses Opus 4.6.</div>
+  </div>
+</div>
+
+<h2 id="sec-workers">D.5 Worker Agents (auto-invoked + directly callable)</h2>
+<div class="box-info">These agents are part of mandatory quality chains <strong>and</strong> can be called directly by developers. All appear when you type <code>@</code> in chat. They have read-only Jira access (<code>jira_get_issue</code>, <code>jira_search_issues</code>) and can check file errors via <code>vscode/openErrors</code>.</div>
+<table>
+  <thead><tr><th>Agent</th><th>Invoked By</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>@backend-tests</code> — U</td><td><code>@backend</code> chain or directly</td><td>NUnit + Moq — happy + error paths, ≥95% coverage</td></tr>
+    <tr><td><code>@frontend-tests</code> — Butterfingers</td><td><code>@frontend</code> chain or directly</td><td>Vitest + RTL — behavior assertions, ≥90% coverage, Jira ticket context</td></tr>
+    <tr><td><code>@e2e-tests</code> — Droney</td><td><code>@frontend</code> chain or directly</td><td>Cypress POM — strict selectors, no raw cy.get(), Jira ticket context</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════ D.6 REVIEWER MODES ══════ -->
+<section id="sec-reviewer-modes">
+<h2>D.6 Code Reviewer — Review Modes &amp; Multi-Model Panel</h2>
+<p>The <code>@reviewer</code> agent (Vision) supports seven review modes ranging from a fast single-pass quality check to a full four-specialist multi-model panel with cross-examination and an auto-fix loop. Choose the mode that matches your workflow stage.</p>
+
+<h3>Review Modes Quick Reference</h3>
+<table>
+  <thead><tr><th>Flag</th><th>Focus</th><th>Panel?</th><th>Best For</th></tr></thead>
+  <tbody>
+    <tr><td><code>--quality</code> <em>(default)</em></td><td>Clean code, SOLID, DUP-1–5 duplication, naming</td><td>❌ Single pass</td><td>Daily reviews, pre-commit checks</td></tr>
+    <tr><td><code>--security</code></td><td>OWASP Top 10, SEC-1–24, auth/authz, injection, secrets</td><td>✅ Security Auditor only</td><td>Auth changes, new API endpoints, user-input handlers</td></tr>
+    <tr><td><code>--performance</code></td><td>O(n²), N+1 queries, memory leaks, missing AsNoTracking, re-renders</td><td>❌ Single pass</td><td>Data-processing services, report generators</td></tr>
+    <tr><td><code>--coverage</code></td><td>Test coverage gaps — missing happy-path, error-path, boundary tests</td><td>✅ Quality Enforcer only</td><td>After feature completion, pre-PR test audit</td></tr>
+    <tr><td><code>--full</code></td><td>All 7 dimensions — Security · Performance · Readability · Tests · Architecture · Accessibility · Duplication</td><td>✅ Full 4-panelist panel + cross-examination</td><td>Pre-PR gate, mandatory chain invocations</td></tr>
+    <tr><td><code>--critique</code></td><td>Adversarial assumption audit — YAGNI, logic gaps, over-engineering</td><td>✅ Architecture Judge + Coordinator</td><td>Design reviews, planning phases</td></tr>
+    <tr><td><code>--panel</code></td><td>Alias for <code>--full</code> — explicitly requests the multi-model panel debate</td><td>✅ Full 4-panelist panel</td><td>When you want to see each specialist's reasoning</td></tr>
+  </tbody>
+</table>
+
+<h3>How to Run — Command Examples</h3>
+<pre><code><span class="comment"># Default quality pass (fastest — use for daily reviews)</span>
+@reviewer src/domain/user-preferences/
+@reviewer src/Services/OrderService.cs
+
+<span class="comment"># Security-focused (new endpoint or auth change)</span>
+@reviewer --security src/Controllers/
+@reviewer --security src/Controllers/UserController.cs
+
+<span class="comment"># Performance review (reports, data processing)</span>
+@reviewer --performance src/Services/ReportService.cs
+
+<span class="comment"># Test coverage audit after feature completion</span>
+@reviewer --coverage src/domain/machine-filter/
+
+<span class="comment"># Full pre-PR review — 4 specialist panel + cross-examination</span>
+@reviewer --full src/
+@reviewer --full src/domain/user-preferences/
+
+<span class="comment"># Adversarial design review (challenges assumptions)</span>
+@reviewer --critique src/domain/new-feature/
+
+<span class="comment"># Explicit panel mode (same as --full, shows each panelist's findings)</span>
+@reviewer --panel src/Controllers/</code></pre>
+
+<h3>Multi-Model Panel Composition (<code>--full</code> / <code>--panel</code> mode)</h3>
+<p>When <code>--full</code> is triggered, four specialist sub-reviewers run in parallel, then cross-examine each other's findings before the Coordinator synthesises the final verdict.</p>
+<table>
+  <thead><tr><th>Role</th><th>Model</th><th>Responsibility</th><th>Bias</th></tr></thead>
+  <tbody>
+    <tr><td><strong>🔒 Security Auditor</strong></td><td>GPT-5.5</td><td>OWASP Top 10, SEC-1–24, auth, XSS, IDOR, secrets, injection</td><td>Strict — flags aggressively</td></tr>
+    <tr><td><strong>🏗 Architecture Judge</strong></td><td>Claude Opus 4.6</td><td>Layer violations, SOLID, DDD, controller pattern, coupling, YAGNI</td><td>Conservative — questions necessity</td></tr>
+    <tr><td><strong>✅ Quality Enforcer</strong></td><td>Claude Sonnet 4.5</td><td>DUP-1–5, WCAG 2.2 AA, readability, test coverage, naming, i18n</td><td>Thorough — exhaustive checklist</td></tr>
+    <tr><td><strong>🧩 Codex Code Agent</strong></td><td>GPT-5.3-Codex</td><td>Compile/type correctness, API misuse, regression risk, patch feasibility</td><td>Pragmatic — validates fixability</td></tr>
+    <tr><td><strong>🎯 Coordinator</strong></td><td>Claude Sonnet 4.6</td><td>Synthesises panel, resolves conflicts, computes final score, drives auto-fix</td><td>Balanced — resolves disagreements</td></tr>
+  </tbody>
+</table>
+
+<h3>Panel Workflow</h3>
+<div class="flow">STEP 1 — PARALLEL DEEP SCAN (all 4 specialists run simultaneously)
+  ├── Security Auditor  → SEC-1–24, OWASP, auth, secrets, injection
+  ├── Architecture Judge → Layer violations, coupling, SOLID, DDD, YAGNI
+  ├── Quality Enforcer  → DUP-1–5, WCAG 2.2 AA, readability, test coverage, naming
+  └── Codex Code Agent  → Compile/type failures, API misuse, patch feasibility
+
+STEP 2 — CROSS-EXAMINATION (specialists challenge each other)
+  Each panelist reviews the other reports and replies:
+  ├── CONFIRM  — "I agree — here is supporting evidence"
+  ├── ESCALATE — "This is worse — severity should be 🔴 because…"
+  ├── DISPUTE  — "I disagree — this is intentional because…"
+  └── ADD      — "Related issue the other panelist missed: [finding]"
+
+STEP 3 — COORDINATOR SYNTHESIS
+  Resolves disputes → deduplicates overlaps → computes final score
+  Produces ranked list: Critical → High → Medium → Low
+
+STEP 4 — AUTO-FIX LOOP (if score &gt; 5)
+  Delegate fixes to @backend / @frontend → re-run panel → max 3 iterations</div>
+
+<h3>Scoring</h3>
+<table>
+  <thead><tr><th>Severity</th><th>Score</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td><span class="sev sev-crit">🔴 Critical</span></td><td>+10</td><td>SQL injection, hardcoded secret, missing auth</td></tr>
+    <tr><td><span class="sev sev-high">🟠 High</span></td><td>+5</td><td>N+1 query, SOLID violation, missing error handling</td></tr>
+    <tr><td><span class="sev sev-med">🟡 Medium</span></td><td>+2</td><td>Hardcoded UI string not in i18n, missing aria-label</td></tr>
+    <tr><td><span class="sev sev-info">🔵 Low</span></td><td>+1</td><td>Naming convention, minor duplication</td></tr>
+  </tbody>
+</table>
+<div class="box-success"><strong>Pass threshold: score ≤ 5.</strong> Score &gt; 5 activates the auto-fix loop — fixes are delegated to <code>@frontend</code> or <code>@backend</code>, then re-reviewed. Maximum 3 iterations before escalating to you.</div>
+
+<h3>Conflict Resolution Between Panelists</h3>
+<table>
+  <thead><tr><th>Conflict</th><th>Tiebreaker Rule</th></tr></thead>
+  <tbody>
+    <tr><td>Security Auditor says 🔴, others say 🟡</td><td><strong>Security wins</strong> — never downgraded without explicit evidence</td></tr>
+    <tr><td>Architecture Judge says 🟠, Security says 🔵</td><td><strong>Security wins</strong> for any finding with an attack vector</td></tr>
+    <tr><td>Quality Enforcer says 🔴, others disagree</td><td><strong>Coordinator decides</strong> — Quality rarely has Critical; assess user impact</td></tr>
+    <tr><td>Codex says a fix cannot compile</td><td><strong>Codex blocks auto-fix</strong> — require compile-safe patch first</td></tr>
+    <tr><td>Two panelists agree, one disputes</td><td><strong>Majority rules</strong> — disputed panelist must provide new evidence</td></tr>
+    <tr><td>All panelists disagree</td><td><strong>Coordinator casts deciding vote</strong> — must cite specific GUARDRAILS rule</td></tr>
+  </tbody>
+</table>
+
+<h3>Auto-Fix Loop Example</h3>
+<div class="flow">@reviewer --full src/domain/order/
+  → Iteration 1: Full panel → score 22
+      Delegate: @backend (8 issues)  +  @frontend (4 issues)
+  → Iteration 2: Full panel on changed files → score 8
+      Delegate: remaining 3 issues
+  → Iteration 3: Full panel on changed files → score 3  ✅  PASS</div>
+
+<div class="box-warning"><strong>Performance tip:</strong> The full panel is thorough but slower. Use <code>--quality</code> (default) for routine reviews and <code>--full</code> only for pre-PR gates and mandatory chain invocations.</div>
+</section>
+
+<!-- ══════ E. QUALITY CHAINS ══════ -->
+<section id="sec-chains">
+<h1>E. Mandatory Quality Chains</h1>
+<div class="box-warning"><strong>Non-negotiable.</strong> Every code generation triggers the appropriate chain automatically. Skip only with explicit request (logged).</div>
+
+<h2 id="sec-chain-be">E.1 Backend Chain</h2>
+<div class="flow">@backend → dotnet build (0 errors)
+  → @migration (auto-detect if schema change)
+  → @backend-tests (happy + error paths, ≥95% coverage)
+  → @reviewer --full (score ≤ 5)
+  → if score > 5: auto-fix → re-review (max 3 iterations → escalate)</div>
+
+<h2 id="sec-chain-fe">E.2 Frontend Chain</h2>
+<div class="flow">@frontend → npm run build + npm run lint (0 errors)
+  → PARALLEL:
+      @frontend-tests (≥90% coverage)
+      @e2e-tests (POM compliant, no raw cy.get())
+  → @reviewer --full (score ≤ 5)
+  → if score > 5: auto-fix → re-review (max 3 iterations → escalate)</div>
+
+<h2 id="sec-chain-fs">E.3 Full-Stack Chain</h2>
+<p>Backend chain → Frontend chain → Cross-contract verification:</p>
+<ul>
+  <li>API response shapes match frontend TypeScript types</li>
+  <li>Query/mutation hook params align with controller endpoint signatures</li>
+  <li>E2E tests exercise the full integration path</li>
+</ul>
+
+<h2 id="sec-post-edit">E.4 Post-Edit Quality Gate</h2>
+<table>
+  <thead><tr><th>Project</th><th>Auto-triggered sequence</th></tr></thead>
+  <tbody>
+    <tr><td>Frontend</td><td><code>prettier --write</code> → <code>eslint --fix</code> → <code>tsc --noEmit</code> → <code>npm run build</code> → <code>vitest run {file}</code></td></tr>
+    <tr><td>Backend</td><td><code>dotnet format</code> → <code>dotnet build</code> → <code>dotnet test --filter {ClassName}</code></td></tr>
+  </tbody>
+</table>
+
+<h2 id="sec-handoffs">E.5 Handoff Buttons</h2>
+<p>After agents complete work, clickable buttons appear in chat to continue the workflow:</p>
+<table>
+  <thead><tr><th>Button</th><th>Appears After</th><th>Routes To</th></tr></thead>
+  <tbody>
+    <tr><td>🔍 Review All Code</td><td><code>@orchestrator</code></td><td><code>@reviewer</code></td></tr>
+    <tr><td>🧱 Scaffold New Service</td><td><code>@orchestrator</code></td><td><code>@scaffold</code></td></tr>
+    <tr><td>📄 Export Plan</td><td><code>@orchestrator</code></td><td>Untitled file</td></tr>
+    <tr><td>🔧 Fix Frontend/Backend Issues</td><td><code>@reviewer</code></td><td><code>@frontend</code> / <code>@backend</code></td></tr>
+    <tr><td>🧪 Add Missing Tests</td><td><code>@reviewer</code></td><td>Test agents</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════ F. WORKFLOW RECIPES ══════ -->
+<section id="sec-recipes">
+<h1>F. Workflow Recipes</h1>
+<div class="grid-2">
+  <div class="card"><div class="card-title">A — Build from Jira ticket</div><pre><code>@orchestrator plan NG-36060</code></pre></div>
+  <div class="card"><div class="card-title">B — Quick build (skip planning)</div><pre><code>@orchestrator build CRUD for UserPreferences</code></pre></div>
+  <div class="card"><div class="card-title">C — Backend only</div><pre><code>@orchestrator build CRUD for X — backend only</code></pre></div>
+  <div class="card"><div class="card-title">D — Frontend only</div><pre><code>@orchestrator convert X.tsx to platform patterns — frontend only</code></pre></div>
+  <div class="card"><div class="card-title">E — Direct code review</div><pre><code>@reviewer --full src/domain/</code></pre></div>
+  <div class="card"><div class="card-title">F — Plan ticket (no code)</div><pre><code>@jira-planner plan NG-36060</code></pre></div>
+  <div class="card"><div class="card-title">G — Confluence-enriched plan</div><pre><code>@docs-planner plan NG-36060</code></pre></div>
+  <div class="card"><div class="card-title">H — Write Confluence docs</div><pre><code>@docs-writer create Frontend Standards page</code></pre></div>
+  <div class="card"><div class="card-title">I — Scaffold microservice</div><pre><code>@orchestrator scaffold new InventoryManagement</code></pre></div>
+</div>
+
+<h3>PO / PM Workflow — Story to Delivery</h3>
+<pre><code><span class="comment"># Step 1: Draft the story</span>
+/draft-user-story users need to filter machines by location and status
+<span class="comment">→ Review Gherkin ACs → reply "yes" → Jira story created</span>
+
+<span class="comment"># Step 2: Sprint health check</span>
+/sprint-status
+
+<span class="comment"># Step 3: Developer picks up ticket</span>
+@orchestrator plan NG-37500
+
+<span class="comment"># Step 4: Pre-PR quality gate</span>
+/review-and-fix-code
+
+<span class="comment"># Step 5: Write PR description</span>
+/describe-pr NG-37500</code></pre>
+</section>
+
+<!-- ══════ F.2 MEMORY & CONTEXT ══════ -->
+<section id="sec-memory">
+<h1>F.2 Memory &amp; Context Retention</h1>
+<p>The agent system uses a <strong>two-layer memory architecture</strong> to reduce context loss between sessions and share learnings across all projects in the organization.</p>
+
+<div class="box-info"><strong>Why this matters:</strong> Without memory, every session starts from zero. Developers re-discover the same gotchas, repeat the same architectural decisions, and lose planning context when a conversation ends. The memory system solves this org-wide.</div>
+
+<h2 id="sec-memory-layers">F.2a Two-Layer Architecture</h2>
+<table>
+  <thead><tr><th>Layer</th><th>Location</th><th>Scope</th><th>Lifetime</th><th>Updated By</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Org-level</strong></td><td><code>.github-private/memories/org/</code></td><td>All projects</td><td>Permanent (git)</td><td>Developer PR</td></tr>
+    <tr><td><strong>Repo-level</strong></td><td><code>.copilot/memories/repo/</code></td><td>Single project</td><td>30 days (auto-pruned)</td><td>session-logger hook</td></tr>
+    <tr><td><strong>Session</strong></td><td><code>/memories/session/</code></td><td>Current conversation</td><td>Conversation only</td><td>Agent (Copilot-native)</td></tr>
+  </tbody>
+</table>
+
+<h3>Org-Level Memory Files</h3>
+<table>
+  <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>memories/org/conventions.md</code></td><td>Naming, architecture, quality standards shared by all teams</td></tr>
+    <tr><td><code>memories/org/anti-patterns.md</code></td><td>Known bad patterns — promoted from repo-level gotchas when recurring</td></tr>
+    <tr><td><code>memories/org/architecture-decisions.md</code></td><td>Org-wide ADRs (e.g., "why shared agent system", "why two-layer memory")</td></tr>
+    <tr><td><code>memories/org/tool-tips.md</code></td><td>Agent, hook, and MCP usage tips that help all developers</td></tr>
+  </tbody>
+</table>
+
+<h3>Repo-Level Memory (Auto-Generated)</h3>
+<table>
+  <thead><tr><th>File</th><th>Purpose</th><th>Generated By</th></tr></thead>
+  <tbody>
+    <tr><td><code>.copilot/memories/repo/session-summaries/*.md</code></td><td>Session digest: files changed, gotchas, prompt count</td><td><code>log-session-end.sh</code></td></tr>
+    <tr><td><code>.copilot/memories/repo/discovered-gotchas.md</code></td><td>Auto-captured lessons (keyword-triggered)</td><td><code>log-session-end.sh</code></td></tr>
+  </tbody>
+</table>
+
+<h2 id="sec-memory-hooks">F.2b Session Hooks for Context</h2>
+
+<h3>Session Start (<code>log-session-start.sh</code>)</h3>
+<ul>
+  <li>Logs session start event to <code>logs/copilot/session.log</code></li>
+  <li>Prints last session summary path — developer sees continuity hint</li>
+  <li>Shows accumulated gotcha count as a reminder</li>
+</ul>
+
+<h3>Session End (<code>log-session-end.sh</code>)</h3>
+<ul>
+  <li>Generates session summary to <code>.copilot/memories/repo/session-summaries/YYYY-MM-DD-HHmm.md</code></li>
+  <li>Captures gotchas via expanded keyword scan: <code>gotcha:</code>, <code>lesson:</code>, <code>remember:</code>, <code>important:</code>, <code>note for future:</code>, <code>trap:</code>, <code>pitfall:</code>, <code>watch out:</code>, <code>careful:</code>, <code>beware:</code></li>
+  <li>Prunes session summaries older than 30 days</li>
+  <li>Suggests org-level promotion when &gt;5 gotchas accumulate</li>
+</ul>
+
+<h2 id="sec-memory-tips">F.2c Best Practices</h2>
+
+<div class="grid-2">
+  <div class="card"><div class="card-title">✅ DO</div>
+    <ul>
+      <li>Use keywords (<code>gotcha:</code>, <code>lesson:</code>, <code>remember:</code>) in conversations for auto-capture</li>
+      <li>Ask Copilot to "check my last session summary" when resuming work</li>
+      <li>Review <code>discovered-gotchas.md</code> periodically — promote recurring ones to org-level via PR</li>
+      <li>Write to <code>/memories/session/</code> for complex multi-step tasks within a session</li>
+      <li>Check org memories before making architecture decisions</li>
+    </ul>
+  </div>
+  <div class="card"><div class="card-title">❌ DON'T</div>
+    <ul>
+      <li>Don't expect full conversation replay — hooks capture metadata, not full text</li>
+      <li>Don't modify org-level memories directly — always via PR to <code>.github-private</code></li>
+      <li>Don't store secrets in memory files — they're committed to git</li>
+      <li>Don't ignore the promotion hints — accumulated gotchas signal systemic issues</li>
+    </ul>
+  </div>
+</div>
+
+<div class="box-success"><strong>Instruction file:</strong> The <code>memory-conventions.instructions.md</code> (applyTo: <code>**</code>) auto-loads for all agents, ensuring they follow these memory rules without manual invocation.</div>
+</section>
+
+<!-- ══════ F.3 KNOWLEDGE BASE ══════ -->
+<section id="sec-knowledge-base">
+<h1>F.3 Knowledge Base</h1>
+<p>The <strong>knowledge base</strong> is a set of living documents that give LLMs instant domain context — without exhausting the context window or forcing the agent to re-read source files from scratch. It complements the memory system: memory tracks <em>what happened in past sessions</em>; the knowledge base captures <em>what the code does</em>.</p>
+
+<div class="box-info"><strong>Why this matters:</strong> When an agent starts working in a large codebase, it must spend tokens exploring source files just to understand the domain. A pre-built knowledge base short-circuits that exploration — the agent reads one <code>AGENTS.md</code> and has everything it needs to proceed.</div>
+
+<h2>What Gets Created</h2>
+<table>
+  <thead><tr><th>File</th><th>Purpose</th><th>Updated By</th></tr></thead>
+  <tbody>
+    <tr><td><code>{folder}/AGENTS.md</code></td><td>1-page index per domain folder — purpose, key entities, entry points, key files, links. VS Code Copilot reads this automatically when working in that folder.</td><td><code>/knowledge-init</code></td></tr>
+    <tr><td><code>docs/{domain}.md</code></td><td>Deep knowledge doc — bounded context, data model, business rules, flows, external contracts, known gotchas.</td><td><code>/knowledge-init</code></td></tr>
+    <tr><td><code>docs/INDEX.md</code></td><td>Master index — all domains, optional project metadata (Value Stream, Confluence URL, Jira project keys, Jira epics).</td><td><code>/knowledge-init</code></td></tr>
+    <tr><td><code>.copilot/memories/repo/knowledge-drift.md</code></td><td>Stale domain log — entries written automatically by the <code>knowledge-drift</code> hook when source files change.</td><td><code>knowledge-drift</code> hook</td></tr>
+  </tbody>
+</table>
+
+<h2>How to Build It</h2>
+<pre><code><span class="comment"># First run — full scan (prompts for optional project metadata)</span>
+/knowledge-init
+
+<span class="comment"># Scope to one domain</span>
+/knowledge-init Orders
+
+<span class="comment"># Refresh stale domains flagged by knowledge-drift hook</span>
+/knowledge-init --update
+
+<span class="comment"># Update project metadata only</span>
+/knowledge-init --meta-only</code></pre>
+
+<h2>Automatic Drift Detection</h2>
+<p>The <code>knowledge-drift</code> hook runs at every session end. It detects source files changed during the session, maps them to their domain folder, and appends a <code>STALE:</code> entry to the drift log. On your next session, Copilot will surface these stale domains. Run <code>/knowledge-init --update</code> to refresh only the affected domains.</p>
+
+<div class="box-success"><strong>Update safety:</strong> Sections you annotate with <code>&lt;!-- manual --&gt;</code> in any knowledge doc are never overwritten by <code>--update</code>. Use this for hand-written business rules and gotchas that require human judgment.</div>
+
+<h2>Scope Boundary</h2>
+<table>
+  <thead><tr><th>Knowledge Base Captures</th><th>Not In Knowledge Base</th></tr></thead>
+  <tbody>
+    <tr><td>What each domain does (purpose, entities, rules, flows)</td><td>Coding standards — live in GUARDRAILS</td></tr>
+    <tr><td>External service contracts and integration points</td><td>Test patterns — live in testing-standards instructions</td></tr>
+    <tr><td>Known gotchas and operational quirks</td><td>Code snippets — agents read source files directly</td></tr>
+    <tr><td>Project metadata (Value Stream, Jira/Confluence links)</td><td>Session history — lives in memory system</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════ G. SKILLS ══════ -->
+<section id="sec-skills">
+<h1>G. Skills &amp; Prompts</h1>
+<p>Skills are reusable knowledge packages in <code>skills/</code>. They provide the same quality gates in VS Code, CLI, and cloud agents. In v2.2.0, all 13 agents were slimmed by replacing inline content with <code>#skill:xxx</code> references — <strong>68% total token reduction</strong> (6,611 → 2,056 lines). Each skill has its own <code>README.md</code> with full documentation.</p>
+
+<h2 id="sec-skills-overview">G.1 All 28 Skills</h2>
+<table>
+  <thead><tr><th>Skill</th><th>Purpose</th><th>Category</th><th>Used By</th></tr></thead>
+  <tbody>
+    <tr><td><a href="#skill-knowledge-init"><code>knowledge-init</code></a></td><td>Build/refresh living knowledge base — per-domain AGENTS.md + docs/{domain}.md + INDEX.md with Jira/Confluence metadata</td><td><span class="role-pill lead">Knowledge</span></td><td><code>/knowledge-init</code></td></tr>
+    <tr><td><a href="#skill-acquire-codebase-knowledge"><code>acquire-codebase-knowledge</code></a></td><td>Structured codebase exploration &amp; onboarding</td><td><span class="role-pill dev">Dev Tools</span></td><td><code>/explain-project</code></td></tr>
+    <tr><td><a href="#skill-code-review-pipeline"><code>code-review-pipeline</code></a></td><td>Multi-perspective review + auto-fix loop (max 3 iterations)</td><td><span class="role-pill lead">Quality</span></td><td><code>@reviewer</code></td></tr>
+    <tr><td><a href="#skill-confluence-content-guide"><code>confluence-content-guide</code></a></td><td>Confluence page templates and labeling conventions</td><td><span class="role-pill pm">Docs</span></td><td><code>@docs-writer</code>, <code>@docs-planner</code></td></tr>
+    <tr><td><a href="#skill-conventional-commit"><code>conventional-commit</code></a></td><td>Conventional Commits format enforcement</td><td><span class="role-pill dev">Dev Tools</span></td><td><code>/describe-pr</code></td></tr>
+    <tr><td><a href="#skill-create-adr"><code>create-adr</code></a></td><td>ADR creation with Confluence integration</td><td><span class="role-pill pm">Docs</span></td><td><code>@docs-writer</code></td></tr>
+    <tr><td><a href="#skill-csharp-nunit"><code>csharp-nunit</code></a></td><td>NUnit + Moq + MockQueryable test templates</td><td><span class="role-pill dev">Backend</span></td><td><code>@backend-tests</code></td></tr>
+    <tr><td><a href="#skill-diagnose"><code>diagnose</code></a></td><td>AI workflow health check — agent config, MCP, GUARDRAILS</td><td><span class="role-pill dev">Dev Tools</span></td><td>Tech Lead</td></tr>
+    <tr><td><a href="#skill-doc-comments"><code>doc-comments</code></a></td><td>XML doc (C#) / JSDoc (TS) generation</td><td><span class="role-pill pm">Docs</span></td><td><code>/add-doc-comments</code></td></tr>
+    <tr><td><a href="#skill-dotnet-crud-scaffold"><code>dotnet-crud-scaffold</code></a></td><td>.NET CRUD layer templates (DTO → Controller → Startup)</td><td><span class="role-pill dev">Backend</span></td><td><code>@backend</code>, <code>@scaffold</code></td></tr>
+    <tr><td><a href="#skill-dotnet-namespace-detect"><code>dotnet-namespace-detect</code></a></td><td>Auto-detect .NET namespace from .csproj</td><td><span class="role-pill dev">Backend</span></td><td><code>@backend</code>, <code>@backend-tests</code>, <code>@migration</code>, <code>@scaffold</code></td></tr>
+    <tr><td><a href="#skill-dotnet-quality-chain"><code>dotnet-quality-chain</code></a></td><td>Backend chain: build → migrate → test → review</td><td><span class="role-pill lead">Quality</span></td><td><code>@orchestrator</code>, <code>@backend</code></td></tr>
+    <tr><td><a href="#skill-explain-file"><code>explain-file</code></a></td><td>Deep file analysis — type detection, layer mapping</td><td><span class="role-pill dev">Dev Tools</span></td><td><code>/explain-file</code></td></tr>
+    <tr><td><a href="#skill-gherkin-format"><code>gherkin-format</code></a></td><td>Gherkin rules G1–G14 + worked examples</td><td><span class="role-pill po">Jira</span></td><td><code>@jira-planner</code>, <code>/draft-user-story</code></td></tr>
+    <tr><td><a href="#skill-jira-gherkin-convert"><code>jira-gherkin-convert</code></a></td><td>Convert Jira descriptions to Gherkin ACs</td><td><span class="role-pill po">Jira</span></td><td><code>/convert-to-gherkin</code></td></tr>
+    <tr><td><a href="#skill-jira-user-story-draft"><code>jira-user-story-draft</code></a></td><td>Draft stories with Gherkin + T-shirt estimates</td><td><span class="role-pill po">Jira</span></td><td><code>/draft-user-story</code></td></tr>
+    <tr><td><a href="#skill-myorg-doc-template"><code>myorg-doc-template</code></a></td><td>HTML product doc template (GPSR/PLD/CRA)</td><td><span class="role-pill pm">Docs</span></td><td><code>@product-manual</code></td></tr>
+    <tr><td><a href="#skill-performance-optimize"><code>performance-optimize</code></a></td><td>.NET + React performance analysis patterns</td><td><span class="role-pill lead">Quality</span></td><td><code>/optimize-performance</code></td></tr>
+    <tr><td><a href="#skill-playwright-test-gen"><code>playwright-test-gen</code></a></td><td>Playwright test generation with page objects</td><td><span class="role-pill dev">Frontend</span></td><td>Future use</td></tr>
+    <tr><td><a href="#skill-product-doc-gap-checker"><code>product-doc-gap-checker</code></a></td><td>Product manual completeness audit</td><td><span class="role-pill pm">Docs</span></td><td><code>@product-manual</code></td></tr>
+    <tr><td><a href="#skill-product-flow-screenshots"><code>product-flow-screenshots</code></a></td><td>Cypress screenshot tour generation</td><td><span class="role-pill dev">Frontend</span></td><td><code>/product-flow-screenshots</code>, <code>@e2e-tests</code></td></tr>
+    <tr><td><a href="#skill-react-crud-scaffold"><code>react-crud-scaffold</code></a></td><td>React CRUD templates (types → hooks → page → dialog)</td><td><span class="role-pill dev">Frontend</span></td><td><code>@frontend</code></td></tr>
+    <tr><td><a href="#skill-react-quality-chain"><code>react-quality-chain</code></a></td><td>Frontend chain: build → lint → test + E2E → review</td><td><span class="role-pill lead">Quality</span></td><td><code>@orchestrator</code>, <code>@frontend</code></td></tr>
+    <tr><td><a href="#skill-react-vitest"><code>react-vitest</code></a></td><td>Vitest + RTL test templates (mock factories, controllers)</td><td><span class="role-pill dev">Frontend</span></td><td><code>@frontend-tests</code></td></tr>
+    <tr><td><a href="#skill-review-and-fix"><code>review-and-fix</code></a></td><td>Fix-first code review across 5 dimensions</td><td><span class="role-pill lead">Quality</span></td><td><code>/review-and-fix-code</code></td></tr>
+    <tr><td><a href="#skill-security-review"><code>security-review</code></a></td><td>OWASP/SEC-1–24 scan patterns for .NET + React</td><td><span class="role-pill lead">Quality</span></td><td><code>@reviewer --security</code></td></tr>
+    <tr><td><a href="#skill-trace-bug"><code>trace-bug</code></a></td><td>Root-cause analysis from stack traces</td><td><span class="role-pill dev">Dev Tools</span></td><td><code>/trace-bug</code></td></tr>
+  </tbody>
+</table>
+
+<div class="box-info"><strong>New in v3.3.0:</strong> <code>harness-creator</code> skill added — validates and scaffolds the five harness subsystems (Instructions, State, Verification, Scope, Lifecycle) for any project repo. Powers the new Long Build mode in <code>@orchestrator</code> and the <code>--qa-mode</code> Playwright evaluator in <code>@reviewer</code>.</div>
+
+<div class="box-info"><strong>New in v3.2.0:</strong> <code>knowledge-init</code> skill added — builds per-domain AGENTS.md + docs/ knowledge base with <code>knowledge-drift</code> sessionEnd hook for automatic drift detection.</div>
+
+<div class="box-info"><strong>Skill rename map (v2.2.0):</strong> <code>backend-crud-templates</code> → <code>dotnet-crud-scaffold</code> · <code>frontend-crud-templates</code> → <code>react-crud-scaffold</code> · <code>frontend-test-templates</code> → <code>react-vitest</code> · <code>nunit-test-templates</code> → <code>csharp-nunit</code> · <code>mandatory-backend-chain</code> → <code>dotnet-quality-chain</code> · <code>mandatory-frontend-chain</code> → <code>react-quality-chain</code> · <code>mandatory-review-chain</code> → <code>code-review-pipeline</code> · <code>namespace-detection</code> → <code>dotnet-namespace-detect</code> · <code>manual-gap-checker</code> → <code>product-doc-gap-checker</code></div>
+
+<!-- ── G.1a Backend Skills ── -->
+<h2 id="sec-skill-backend">G.1a Backend Skills (7)</h2>
+
+<div class="card" id="skill-dotnet-crud-scaffold">
+  <h3>dotnet-crud-scaffold</h3>
+  <p>Complete CRUD code templates for Org .NET 10 services using ServiceBase patterns — DTO → Mapping → Repository → Service → Controller → Startup → Constants.</p>
+  <p><strong>7 Template Layers:</strong> DTO · Mapping Profile · Repository · Service · Controller · Startup Registration · Constants</p>
+  <p><strong>Dependencies:</strong> <code>Org.ServiceBase</code>, AutoMapper, EF Core</p>
+  <p><strong>Used by:</strong> <code>@backend</code>, <code>@scaffold</code></p>
+</div>
+
+<div class="card" id="skill-dotnet-namespace-detect">
+  <h3>dotnet-namespace-detect</h3>
+  <p>Shared namespace auto-detection logic for all .NET agents. Run before generating any code or tests.</p>
+  <p><strong>Strategy:</strong> <code>.csproj</code> → existing <code>namespace</code> declarations → <code>Startup.cs</code> → ask user</p>
+  <p><strong>Used by:</strong> <code>@backend</code>, <code>@backend-tests</code>, <code>@migration</code>, <code>@scaffold</code></p>
+</div>
+
+<div class="card" id="skill-dotnet-quality-chain">
+  <h3>dotnet-quality-chain</h3>
+  <p>Backend quality chain: build → migration auto-detect → unit tests (95% coverage) → code review. Enforces GUARDRAILS § 12b.</p>
+  <p><strong>Thresholds:</strong> Coverage ≥ 95% · Review score ≤ 5 · Max 3 iterations</p>
+  <p><strong>Used by:</strong> <code>@orchestrator</code>, <code>@backend</code></p>
+</div>
+
+<div class="card" id="skill-csharp-nunit">
+  <h3>csharp-nunit</h3>
+  <p>NUnit + Moq + MockQueryable test templates for Org .NET 10 services. Controller, service, and repository test patterns for all CRUD operations.</p>
+  <p><strong>Patterns:</strong> GetAll · GetById · Create · Update · Delete · NotFound · BadRequest</p>
+  <p><strong>Used by:</strong> <code>@backend-tests</code></p>
+</div>
+
+<div class="card" id="skill-performance-optimize">
+  <h3>performance-optimize</h3>
+  <p>Performance analysis patterns — 9 .NET checks (N+1 queries, <code>AsNoTracking</code>, async) and 8 React checks (memoization, virtualization, TanStack Query).</p>
+  <p><strong>Severity levels:</strong> <span class="sev crit">Critical</span> <span class="sev high">High</span> <span class="sev med">Medium</span></p>
+  <p><strong>Used by:</strong> <code>/optimize-performance</code></p>
+</div>
+
+<div class="card" id="skill-explain-file">
+  <h3>explain-file</h3>
+  <p>Deep file analysis — type detection (8 .NET + 10 React patterns), layer mapping, dependency tracing, and test counterpart lookup.</p>
+  <p><strong>Output:</strong> Purpose · Layer · Depends on · Called by · Test counterpart</p>
+  <p><strong>Used by:</strong> <code>/explain-file</code></p>
+</div>
+
+<div class="card" id="skill-doc-comments">
+  <h3>doc-comments</h3>
+  <p>Add XML doc comments (C#) or JSDoc (TypeScript/TSX) to public/exported members. No logic changes — documentation only.</p>
+  <p><strong>Formats:</strong> C# <code>&lt;summary&gt;/&lt;param&gt;/&lt;returns&gt;</code> · TS <code>@param/@returns/@example</code></p>
+  <p><strong>Used by:</strong> <code>/add-doc-comments</code></p>
+</div>
+
+<!-- ── G.1b Frontend Skills ── -->
+<h2 id="sec-skill-frontend">G.1b Frontend Skills (5)</h2>
+
+<div class="card" id="skill-react-crud-scaffold">
+  <h3>react-crud-scaffold</h3>
+  <p>Complete CRUD code templates for React 19 + MUI 7 features — types → query hooks → mutation hooks → controller hooks → dialog controller → page → dialog → table.</p>
+  <p><strong>Dependencies:</strong> <code>@myorg/ng-lib-react-platform-mui</code>, TanStack Query, react-hook-form, MUI 7</p>
+  <p><strong>Used by:</strong> <code>@frontend</code></p>
+</div>
+
+<div class="card" id="skill-react-quality-chain">
+  <h3>react-quality-chain</h3>
+  <p>Frontend quality chain: build + lint → parallel unit tests (90%) and Cypress E2E → code review. Enforces GUARDRAILS § 12a.</p>
+  <p><strong>Thresholds:</strong> Coverage ≥ 90% · Cypress mandatory · Review score ≤ 5</p>
+  <p><strong>Used by:</strong> <code>@orchestrator</code>, <code>@frontend</code></p>
+</div>
+
+<div class="card" id="skill-react-vitest">
+  <h3>react-vitest</h3>
+  <p>Vitest + React Testing Library test templates — controller hook tests, dialog controllers, query/mutation tests, mock data factories, and component tests.</p>
+  <p><strong>Priority:</strong> Controller hooks → Dialog controllers → Query hooks → Mutations → Utils → Pages → Dialogs → Tables</p>
+  <p><strong>Used by:</strong> <code>@frontend-tests</code></p>
+</div>
+
+<div class="card" id="skill-product-flow-screenshots">
+  <h3>product-flow-screenshots</h3>
+  <p>Generate or update Cypress <code>productFlowScreenshots.spec.cy.ts</code> — a documentation screenshot walkthrough of every app screen at 1920×1080.</p>
+  <p><strong>Helpers:</strong> <code>forceMonitorViewport</code> · <code>waitForLoading</code> · <code>shotPage</code> · <code>shotDialog</code></p>
+  <p><strong>Used by:</strong> <code>/product-flow-screenshots</code>, <code>@e2e-tests</code></p>
+</div>
+
+<div class="card" id="skill-playwright-test-gen">
+  <h3>playwright-test-gen</h3>
+  <p>Playwright test generation with page objects, fixtures, API mocking, and <code>@axe-core/playwright</code> accessibility checks. <em>Currently marked for future use.</em></p>
+  <p><strong>Templates:</strong> Page Object Pattern · Test Spec · Fixtures · Accessibility</p>
+  <p><strong>Used by:</strong> Future E2E workflows</p>
+</div>
+
+<!-- ── G.1c Quality & Review ── -->
+<h2 id="sec-skill-quality">G.1c Quality &amp; Review Skills (4)</h2>
+
+<div class="card" id="skill-code-review-pipeline">
+  <h3>code-review-pipeline</h3>
+  <p>Multi-perspective code review chain with 5 lenses (Correctness, Security, Architecture, Performance, Standards), auto-fix delegation, and max 3-iteration loop.</p>
+  <p><strong>Returns:</strong> JSON <code>{ score, findings[], fixed[], remaining[] }</code></p>
+  <p><strong>Used by:</strong> <code>@reviewer</code>, <code>@orchestrator</code></p>
+</div>
+
+<div class="card" id="skill-review-and-fix">
+  <h3>review-and-fix</h3>
+  <p>Fix-first code review — review staged/uncommitted changes across 5 dimensions and fix every issue immediately without approval gates.</p>
+  <p><strong>Scoring:</strong> <span class="sev crit">Critical=10</span> <span class="sev high">High=5</span> <span class="sev med">Medium=2</span> <span class="sev info">Info=1</span></p>
+  <p><strong>Used by:</strong> <code>/review-and-fix-code</code></p>
+</div>
+
+<div class="card" id="skill-security-review">
+  <h3>security-review</h3>
+  <p>AI-powered codebase security review — 24 SEC checks across 6 categories: Input Validation, Auth, Data Protection, Supply Chain, Error Handling, Infrastructure.</p>
+  <p><strong>Coverage:</strong> OWASP Top 10 · GUARDRAILS SEC-1–24 · .NET + React patterns</p>
+  <p><strong>Used by:</strong> <code>@reviewer --security</code></p>
+</div>
+
+<div class="card" id="skill-trace-bug">
+  <h3>trace-bug</h3>
+  <p>Structured root-cause analysis from error messages or stack traces — 6-step process: Parse → Read Source → Trace Chain → Search Patterns → Rank Causes → Suggest Fixes.</p>
+  <p><strong>Confidence levels:</strong> <span class="sev crit">High</span> <span class="sev high">Medium</span> <span class="sev med">Low</span></p>
+  <p><strong>Used by:</strong> <code>/trace-bug</code></p>
+</div>
+
+<!-- ── G.1d Jira & Gherkin ── -->
+<h2 id="sec-skill-jira">G.1d Jira &amp; Gherkin Skills (4)</h2>
+
+<div class="card" id="skill-gherkin-format">
+  <h3>gherkin-format</h3>
+  <p>Complete Gherkin format specification — 14 rules (G1–G14), Jira-specific constraints, and worked examples for all ticket types.</p>
+  <p><strong>Structures:</strong> Feature · Scenario · Rule · Background · Scenario Outline · Doc Strings · Data Tables</p>
+  <p><strong>Used by:</strong> <code>@jira-planner</code>, <code>/draft-user-story</code>, <code>/convert-to-gherkin</code></p>
+</div>
+
+<div class="card" id="skill-jira-gherkin-convert">
+  <h3>jira-gherkin-convert</h3>
+  <p>Convert Jira ticket descriptions to full Gherkin ACs — smart detection (full/partial/none), 8 ticket type patterns, 12 quality gates, Jira-safe write-back via MCP.</p>
+  <p><strong>Tools:</strong> Jira MCP (<code>get_issue</code>, <code>update_issue</code>)</p>
+  <p><strong>Used by:</strong> <code>/convert-to-gherkin</code></p>
+</div>
+
+<div class="card" id="skill-jira-user-story-draft">
+  <h3>jira-user-story-draft</h3>
+  <p>Draft Jira user stories with Gherkin ACs, T-shirt estimates (S=2, M=3, L=5, XL=8 points), and optional Epic linking — creates via MCP after confirmation.</p>
+  <p><strong>Workflow:</strong> Parse Idea → Search Epics → Draft ACs → Estimate → Create</p>
+  <p><strong>Used by:</strong> <code>/draft-user-story</code></p>
+</div>
+
+<div class="card" id="skill-conventional-commit">
+  <h3>conventional-commit</h3>
+  <p>Enforces Conventional Commits format — 11 types (feat, fix, refactor, test, etc.), mandatory scope, Jira ticket references in footers.</p>
+  <p><strong>Format:</strong> <code>type(scope): description</code> + <code>Refs: NG-XXXX</code> footer</p>
+  <p><strong>Used by:</strong> <code>/describe-pr</code></p>
+</div>
+
+<!-- ── G.1e Documentation ── -->
+<h2 id="sec-skill-docs">G.1e Documentation Skills (4)</h2>
+
+<div class="card" id="skill-confluence-content-guide">
+  <h3>confluence-content-guide</h3>
+  <p>Reference guide for structuring AI-consumable Confluence documentation — page templates, labeling conventions, and NG Space taxonomy.</p>
+  <p><strong>Labels:</strong> <code>ai-consumable</code> tag for AI-readable pages</p>
+  <p><strong>Used by:</strong> <code>@docs-writer</code>, <code>@docs-planner</code></p>
+</div>
+
+<div class="card" id="skill-create-adr">
+  <h3>create-adr</h3>
+  <p>Create Architectural Decision Records following the Copilot Agent System template — Context → Options → Decision → Rationale → Consequences → Reversibility.</p>
+  <p><strong>Integration:</strong> Publishes to Confluence via <code>@docs-writer</code></p>
+  <p><strong>Used by:</strong> <code>@docs-writer</code></p>
+</div>
+
+<div class="card" id="skill-myorg-doc-template">
+  <h3>myorg-doc-template</h3>
+  <p>Complete HTML template, compliance rules (GPSR/PLD/CRA), and per-section content guide for Org product documentation.</p>
+  <p><strong>Sections:</strong> A (Overview) through I (Version History) with Org corporate design CSS</p>
+  <p><strong>Used by:</strong> <code>@product-manual</code></p>
+</div>
+
+<div class="card" id="skill-product-doc-gap-checker">
+  <h3>product-doc-gap-checker</h3>
+  <p>Audits existing product manual HTML for missing content, incomplete sections, placeholder gaps, and missing i18n keys.</p>
+  <p><strong>Checks:</strong> 10 section checks (A–J) · Structure · Data freshness · Translation coverage</p>
+  <p><strong>Used by:</strong> <code>@product-manual</code>, <code>/update-product-manual</code></p>
+</div>
+
+<!-- ── G.1g Knowledge Base ── -->
+<h2 id="sec-knowledge-init">G.1g Knowledge Base Skill (1)</h2>
+
+<div class="card" id="skill-knowledge-init">
+  <h3>knowledge-init</h3>
+  <p>Builds and maintains a living knowledge base for any application repo — domain by domain. App/repo level, not tied to any specific tech stack.</p>
+  <p><strong>Produces:</strong></p>
+  <ul>
+    <li><code>{folder}/AGENTS.md</code> — 1-page memory-map index per domain folder (VS Code Copilot reads this automatically when working in that folder). Contains: purpose, key entities, entry points, key files, links to deep docs.</li>
+    <li><code>docs/{domain}.md</code> — deep knowledge doc per domain: bounded context, data model, business rules, flows, external contracts, known gotchas.</li>
+    <li><code>docs/INDEX.md</code> — master index across all domains. Includes optional project metadata: Value Stream, Confluence URL, Jira project keys, Jira epic links.</li>
+  </ul>
+  <p><strong>Invocation modes:</strong>
+    <code>/knowledge-init</code> (full scan) ·
+    <code>/knowledge-init [domain]</code> (scoped) ·
+    <code>/knowledge-init --update</code> (drift-mode) ·
+    <code>/knowledge-init --meta-only</code> (metadata update)
+  </p>
+  <p><strong>Update safety:</strong> Sections marked <code>&lt;!-- manual --&gt;</code> are never overwritten on <code>--update</code>.</p>
+  <p><strong>Companion hook:</strong> <code>knowledge-drift</code> (sessionEnd) — detects changed source files, maps them to their domain folder, and writes stale entries to <code>.copilot/memories/repo/knowledge-drift.md</code> for the next <code>--update</code> run.</p>
+  <p><strong>Scope:</strong> Domain knowledge only — what the code <em>does</em>. Coding standards live in GUARDRAILS. Test patterns live in testing-standards instructions.</p>
+  <p><strong>Used by:</strong> <code>/knowledge-init</code></p>
+</div>
+
+<!-- ── G.1f Dev Tools ── -->
+<h2 id="sec-skill-devtools">G.1f Dev Tools (2)</h2>
+
+<div class="card" id="skill-acquire-codebase-knowledge">
+  <h3>acquire-codebase-knowledge</h3>
+  <p>Structured codebase exploration for onboarding — 4-step process: Project Detection → Architecture Map → Convention Detection → Knowledge Map Output.</p>
+  <p><strong>Stacks:</strong> Separate paths for .NET and React projects</p>
+  <p><strong>Used by:</strong> <code>/explain-project</code>, <code>@planner</code></p>
+</div>
+
+<div class="card" id="skill-diagnose">
+  <h3>diagnose</h3>
+  <p>AI workflow health check — verifies agent configuration, skill availability, hook availability, and MCP connectivity in 4 diagnostic steps.</p>
+  <p><strong>Checks:</strong> Agent Config · Skill References · Hook Scripts · MCP Servers</p>
+  <p><strong>Used by:</strong> Tech Lead diagnostics</p>
+</div>
+
+<!-- ══════ G.2 PROMPTS ══════ -->
+<h2 id="sec-prompts-overview">G.2 All 15 Prompts (Slash Commands)</h2>
+<p>Prompts are slash commands defined in <code>prompts/</code>. Each <code>.prompt.md</code> file is accessible via <code>/command-name</code> in Copilot Chat.</p>
+
+<table>
+  <thead><tr><th>Command</th><th>Description</th><th>Agent</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td><code>/knowledge-init</code></td><td>Build/refresh living knowledge base — per-domain AGENTS.md + docs/ + INDEX.md. Supports full scan, single-domain, --update, --meta-only.</td><td><code>knowledge-init</code> skill</td><td><span class="role-pill dev">Dev</span> <span class="role-pill lead">Lead</span></td></tr>
+    <tr><td><code>/describe-pr</code></td><td>Generate PR title + body from git history, optionally enriched with Jira ACs</td><td><code>agent</code></td><td><span class="role-pill dev">Dev</span></td></tr>
+    <tr><td><code>/explain-project</code></td><td>Instant onboarding — summarise repo stack, architecture, patterns, test strategy</td><td><code>agent</code></td><td><span class="role-pill dev">Dev</span></td></tr>
+    <tr><td><code>/find-confluence-page</code></td><td>Quick Confluence knowledge search — top 5 results with space, category, excerpt</td><td><code>agent</code></td><td><span class="role-pill pm">All</span></td></tr>
+    <tr><td><code>/generate-code</code></td><td>Auto-route to <code>@backend</code> (.NET) or <code>@frontend</code> (React) based on context</td><td><code>agent</code></td><td><span class="role-pill dev">Dev</span></td></tr>
+    <tr><td><code>/generate-tests</code></td><td>Auto-route to <code>@backend-tests</code> (NUnit, 95%) or <code>@frontend-tests</code> (Vitest, 90%)</td><td><code>agent</code></td><td><span class="role-pill dev">Dev</span></td></tr>
+    <tr><td><code>/jarvis</code></td><td>Route task to Jarvis (<code>@orchestrator</code>) for full plan → approve → execute</td><td><code>orchestrator</code></td><td><span class="role-pill dev">Dev</span></td></tr>
+    <tr><td><code>/plan</code></td><td>Plan a feature without executing (Veronica <code>@planner</code>)</td><td><code>planner</code></td><td><span class="role-pill lead">Lead</span></td></tr>
+    <tr><td><code>/product-flow-screenshots</code></td><td>Generate/update Cypress screenshot tour of every app screen</td><td><code>agent</code></td><td><span class="role-pill pm">Docs</span></td></tr>
+    <tr><td><code>/read-jira-ticket</code></td><td>Read Jira ticket as formatted card — summary, status, ACs, links, comments</td><td><code>agent</code></td><td><span class="role-pill po">PO</span></td></tr>
+    <tr><td><code>/review</code></td><td>Quick code review via Vision (<code>@reviewer</code>) — all 7 dimensions</td><td><code>reviewer</code></td><td><span class="role-pill lead">Lead</span></td></tr>
+    <tr><td><code>/scaffold</code></td><td>Scaffold new .NET 10 microservice from scratch (Dum-E <code>@scaffold</code>)</td><td><code>scaffold</code></td><td><span class="role-pill dev">Dev</span></td></tr>
+    <tr><td><code>/sprint-status</code></td><td>Sprint health snapshot — counts by status, blockers, unassigned, % done</td><td><code>agent</code></td><td><span class="role-pill pm">PM</span></td></tr>
+    <tr><td><code>/update-copilot-instructions</code></td><td>Maintain <code>.github/instructions/</code> files — scan for duplications or update sections</td><td><code>agent</code></td><td><span class="role-pill lead">Lead</span></td></tr>
+    <tr><td><code>/update-product-manual</code></td><td>Update existing Org product manual — runs gap check, patches data, reports remaining items</td><td><code>agent</code></td><td><span class="role-pill pm">Docs</span></td></tr>
+  </tbody>
+</table>
+
+</section>
+
+<!-- ══════ G.3 HOOKS ══════ -->
+<section id="sec-hooks">
+<h1>G.3 Hooks</h1>
+<p>Hooks are Copilot Coding Agent lifecycle extensions in <code>hooks/</code>. They run automatically during coding agent sessions to enforce governance, security, auditability, and knowledge freshness — no developer configuration required.</p>
+<table>
+  <thead><tr><th>Hook</th><th>Trigger</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>governance-audit</code></td><td>Agent prompt submission</td><td>Scans agent prompts for threat signals (prompt injection, jailbreaks) and logs governance events</td></tr>
+    <tr><td><code>knowledge-drift</code></td><td>Session end</td><td>Detects source files changed during the session, maps them to domain folders, and appends <code>STALE:</code> entries to <code>.copilot/memories/repo/knowledge-drift.md</code> — so <code>/knowledge-init --update</code> knows what to refresh next run</td></tr>
+    <tr><td><code>secrets-scanner</code></td><td>File modification</td><td>Detects leaked secrets, credentials, API keys, and sensitive data in files modified during agent sessions</td></tr>
+    <tr><td><code>session-logger</code></td><td>Session lifecycle</td><td>Logs all Copilot coding agent activity for audit trail and post-session analysis</td></tr>
+    <tr><td><code>tool-guardian</code></td><td>Tool invocation</td><td>Blocks dangerous ops (<code>rm -rf</code>, <code>git push --force</code>, <code>DROP TABLE</code>) before the agent executes them</td></tr>
+  </tbody>
+</table>
+
+<h2>Benefits</h2>
+<ul>
+  <li><strong>Security:</strong> <code>secrets-scanner</code> + <code>tool-guardian</code> prevent accidental credential leaks and destructive operations</li>
+  <li><strong>Compliance:</strong> <code>governance-audit</code> + <code>session-logger</code> provide ISO 42001 audit trail for AI-assisted development</li>
+  <li><strong>Safety:</strong> <code>tool-guardian</code> enforces GUARDRAILS § P5 (No Destructive Commands) at the tool level</li>
+  <li><strong>Knowledge freshness:</strong> <code>knowledge-drift</code> automatically flags stale AGENTS.md files when source code changes — keeping the knowledge base current without manual effort</li>
+  <li><strong>Zero configuration:</strong> Hooks activate automatically when the plugin is installed</li>
+</ul>
+
+<h2>How Hooks Run</h2>
+<ol>
+  <li>Hooks are declared in <code>plugin.json</code> under the <code>hooks</code> field</li>
+  <li>VS Code loads them when the plugin is installed — no manual activation needed</li>
+  <li>Each hook has a <code>hook.md</code> file defining its trigger event and logic</li>
+  <li>Hooks execute in the coding agent's lifecycle (before tool calls, after file edits, on session start/end)</li>
+  <li>Violations are logged and optionally block the operation (e.g., <code>tool-guardian</code> blocks destructive commands)</li>
+</ol>
+</section>
+
+<!-- ══════ H. MCP SERVERS ══════ -->
+<section id="sec-mcp">
+<h1>H. MCP Servers</h1>
+<p>MCP (Model Context Protocol) servers extend Copilot with external tool integrations. Config is managed at the organization level.</p>
+
+<h2 id="sec-mcp-jira">H.1 Jira MCP Server (<code>jira-azure</code>)</h2>
+<p><strong>Used by:</strong> <code>@jira-planner</code> (read+write) · <code>@orchestrator</code> (read-only)</p>
+<table>
+  <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>get_issue</code></td><td>Fetch ticket by ID</td></tr>
+    <tr><td><code>search_issues</code></td><td>JQL search</td></tr>
+    <tr><td><code>create_issue</code></td><td>Create new tickets</td></tr>
+    <tr><td><code>update_issue</code></td><td>Update fields/description</td></tr>
+    <tr><td><code>add_comment</code></td><td>Add comments</td></tr>
+    <tr><td><code>list_transitions</code></td><td>List status transitions</td></tr>
+    <tr><td><code>transition_issue</code></td><td>Move ticket status</td></tr>
+    <tr><td><code>import_checklist_template</code></td><td>Add DoD checklists</td></tr>
+  </tbody>
+</table>
+
+<h2 id="sec-mcp-confluence">H.2 Confluence MCP Server (<code>confluence-azure</code>)</h2>
+<p><strong>Used by:</strong> <code>@docs-writer</code> (full) · <code>@docs-planner</code> (read+write) · <code>@orchestrator</code> (read-only)</p>
+<table>
+  <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>search</code></td><td>CQL search</td></tr>
+    <tr><td><code>get_page</code></td><td>Read page content</td></tr>
+    <tr><td><code>create_page</code></td><td>Create pages</td></tr>
+    <tr><td><code>update_page</code></td><td>Update pages</td></tr>
+    <tr><td><code>add_label</code></td><td>Tag pages</td></tr>
+    <tr><td><code>add_comment</code></td><td>Add comments</td></tr>
+  </tbody>
+</table>
+
+<div class="box-warning"><strong>Security:</strong> Only permitted agents may access MCP tools. All other agents are blocked by GUARDRAILS § 11 / § 11b. See the Permitted Agent ↔ Tool Matrix in the guardrails documentation.</div>
+
+<h2 id="sec-mcp-setup">H.3 Environment Setup</h2>
+<p>Add to <code>~/.zshrc</code> (macOS/Linux) or user environment variables (Windows):</p>
+<pre><code><span class="comment"># MCP server headers</span>
+export JIRA_MCP_API_KEY="your-jira-mcp-api-key"
+export JIRA_PAT="your-jira-pat"
+export CONFLUENCE_MCP_API_KEY="your-confluence-mcp-api-key"
+export CONFLUENCE_PAT="your-confluence-pat"
+
+<span class="comment"># Atlassian REST API</span>
+export JIRA_BASE_URL="https://myorg.atlassian.net"
+export JIRA_EMAIL="your.name@myorg.com"
+export JIRA_API_TOKEN="your-jira-api-token"
+export CONFLUENCE_BASE_URL="https://myorg.atlassian.net/wiki"
+export CONFLUENCE_API_TOKEN="your-confluence-api-token"</code></pre>
+
+<h3>Verification</h3>
+<pre><code><span class="comment"># Check env vars are set</span>
+echo "JIRA_BASE_URL: ${JIRA_BASE_URL:-(not set)}"
+echo "JIRA_API_TOKEN: ${JIRA_API_TOKEN:+(set)}"
+
+<span class="comment"># Test Jira connectivity</span>
+curl -s -u "${JIRA_EMAIL}:${JIRA_API_TOKEN}" \
+  "${JIRA_BASE_URL}/rest/api/3/myself" | jq '.displayName'
+
+<span class="comment"># Test via Copilot Chat</span>
+@jira-planner plan NG-36060</code></pre>
+
+<h3>Repo-Level MCP Override</h3>
+<p>Individual repos can override MCP servers in <code>.github/copilot/mcp.json</code>:</p>
+<pre><code>{
+  "mcpServers": {
+    "custom-api": {
+      "type": "sse",
+      "url": "https://custom-api.internal.myorg.com/mcp",
+      "headers": { "Authorization": "Bearer ${CUSTOM_API_TOKEN}" }
+    }
+  }
+}</code></pre>
+</section>
+
+<!-- ══════ I. INSTRUCTIONS ══════ -->
+<section id="sec-instructions">
+<h1>I. Auto-Injected Instruction Files</h1>
+<p>Files in <code>.github/instructions/</code> are automatically loaded by Copilot when editing matching files.</p>
+<table>
+  <thead><tr><th>File</th><th>Auto-Applied To</th><th>Content</th></tr></thead>
+  <tbody>
+    <tr><td><code>GUARDRAILS-core</code></td><td><code>**</code> (all)</td><td>Operating Principles · Response Format · Output Contract · Do/Don't · Decision Log</td></tr>
+    <tr><td><code>GUARDRAILS-code</code></td><td><code>*.{cs,ts,tsx}</code></td><td>Quality Gates · Migration Safety · Security SEC-1–24 · Logging · Accessibility</td></tr>
+    <tr><td><code>GUARDRAILS-orchestration</code></td><td><code>agents/**</code></td><td>Domain rules · Jira/Confluence MCP · Mandatory Chains · Performance Targets</td></tr>
+    <tr><td><code>backend-patterns</code></td><td><code>*.cs</code>, <code>Controllers/**</code></td><td>.NET architecture, async patterns, BaseResponse&lt;T&gt;</td></tr>
+    <tr><td><code>testing-standards</code></td><td><code>*.test.ts</code>, <code>*Test.cs</code></td><td>Forbidden anti-patterns, coverage floors</td></tr>
+    <tr><td><code>auth-patterns</code></td><td><code>Controllers/**</code>, <code>*Auth*</code></td><td>JWT auth, RBAC patterns</td></tr>
+    <tr><td><code>cypress-patterns</code></td><td><code>cypress/**</code>, <code>*.cy.ts</code></td><td>POM templates, strict selectors</td></tr>
+    <tr><td><code>platform-mui</code></td><td><code>src/**/*</code></td><td>PlatformMrt, FormDialog, theme spacing</td></tr>
+    <tr><td><code>platform-common</code></td><td><code>src/**/*</code></td><td>i18n, RSQL, shared utilities</td></tr>
+    <tr><td><code>platform-mrt</code></td><td><code>src/**/*</code></td><td>PlatformMrt table configuration</td></tr>
+    <tr><td><code>platform-dev</code></td><td><code>src/**/*</code></td><td>Vite config, build setup</td></tr>
+    <tr><td><code>ef-migration-patterns</code></td><td><code>Migrations/**</code>, <code>*DbContext*</code></td><td>EF Core migration templates</td></tr>
+    <tr><td><code>filters</code></td><td><code>*Filter*</code></td><td>FiltersPanel, RSQL patterns</td></tr>
+    <tr><td><code>delivery-report-template</code></td><td><code>agents/**</code></td><td>Delivery report format (ISO/EU AI Act)</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════ J. QUALITY THRESHOLDS ══════ -->
+<section id="sec-thresholds">
+<h1>J. Quality Thresholds</h1>
+<table>
+  <thead><tr><th>Threshold</th><th>Default</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>REVIEW_PASS_THRESHOLD</code></td><td><strong>5</strong></td><td>Review score must be ≤ this to pass</td></tr>
+    <tr><td><code>FRONTEND_COVERAGE_MIN</code></td><td><strong>90%</strong></td><td>Vitest/RTL coverage floor</td></tr>
+    <tr><td><code>BACKEND_COVERAGE_MIN</code></td><td><strong>95%</strong></td><td>NUnit CRUD path coverage</td></tr>
+    <tr><td><code>MAX_REVIEW_ITERATIONS</code></td><td><strong>3</strong></td><td>Auto-fix loop limit</td></tr>
+    <tr><td><code>CYPRESS_MANDATORY</code></td><td><strong>true</strong></td><td>E2E tests in frontend chain</td></tr>
+    <tr><td><code>MIGRATION_AUTO_DETECT</code></td><td><strong>true</strong></td><td>Migration auto-check after build</td></tr>
+  </tbody>
+</table>
+<p>Override in your project's <code>copilot-instructions.md</code> under <code>## Quality Overrides</code>.</p>
+</section>
+
+<!-- ══════ K. GHERKIN RULES ══════ -->
+<section id="sec-gherkin">
+<h1>K. Gherkin Rules G1–G11</h1>
+<table>
+  <thead><tr><th>#</th><th>Rule</th><th>Detail</th></tr></thead>
+  <tbody>
+    <tr><td>G1</td><td>Feature per AC</td><td>Stories: each AC gets its own Feature block</td></tr>
+    <tr><td>G2</td><td>User story line</td><td>Every Feature includes As a / I want / So that</td></tr>
+    <tr><td>G3</td><td>Min scenarios</td><td>Stories: 2 · Bugs: 3 · Tasks: 2 · Spikes: 2</td></tr>
+    <tr><td>G4</td><td>Named scenarios</td><td>Every Scenario must have a descriptive name</td></tr>
+    <tr><td>G5</td><td>And / But</td><td>Use And for additional conditions, But for negative assertions</td></tr>
+    <tr><td>G6</td><td>Background</td><td>Use Background for shared preconditions</td></tr>
+    <tr><td>G7</td><td>Scenario Outline</td><td>Use with Examples table for data variations</td></tr>
+    <tr><td>G8</td><td>Concrete values</td><td>Use specific test data, not vague placeholders</td></tr>
+    <tr><td>G9</td><td>Traceability</td><td>Feature title: <code>[NG-##### AC#]</code></td></tr>
+    <tr><td>G10</td><td>No invented ACs</td><td>Extract from ticket; edge cases OK, invented rules not</td></tr>
+    <tr><td>G11</td><td>No gherkin tag</td><td>Write plain text to Jira — no <code>```gherkin</code> fences</td></tr>
+  </tbody>
+</table>
+
+<h3>Structure quick-reference</h3>
+<pre><code>Feature: [NG-##### AC1] — Short feature description
+  As a [role]
+  I want [goal]
+  So that [business value]
+
+  Background:
+    Given [common precondition]
+
+  Scenario: Happy path — descriptive name
+    Given [specific precondition]
+    When [user action]
+    Then [expected outcome]
+
+  Scenario: Error path — descriptive name
+    Given [different precondition]
+    When [triggering action]
+    Then [expected error handling]</code></pre>
+</section>
+
+<!-- ══════ L. TROUBLESHOOTING ══════ -->
+<section id="sec-troubleshooting">
+<h1>L. Troubleshooting</h1>
+<table>
+  <thead><tr><th>Problem</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td>Slash commands not appearing</td><td>Restart VS Code. Check <code>prompts/</code> exists with <code>.prompt.md</code> files. Verify Copilot extension ≥ 1.250.</td></tr>
+    <tr><td>Worker agent not visible with <code>@</code></td><td>Expected — hidden workers are auto-invoked by chains. Use <code>@orchestrator</code> as entry point.</td></tr>
+    <tr><td>Agent says "I can't access that tool"</td><td>Check <code>tools:</code> in the agent's frontmatter. Each agent has a restricted tool list.</td></tr>
+    <tr><td>Review loop stuck after 3 iterations</td><td>Agent escalates to you. Fix the issue manually, then <code>@reviewer --full</code> for follow-up pass.</td></tr>
+    <tr><td>Agent invents file paths or APIs</td><td>Guardrail violation — report and run <code>/update-copilot-instructions --scan</code>.</td></tr>
+    <tr><td>Context lost mid-session</td><td>Check <code>/memories/session/chain-state.md</code> — orchestrator checkpoints progress. Re-invoke with "resume".</td></tr>
+    <tr><td>MCP server not detected</td><td>Restart VS Code. Verify <code>mcp.json</code> is valid JSON. Check <code>npx</code> is available. VPN connected.</td></tr>
+    <tr><td>Jira/Confluence auth errors</td><td>Verify env vars: <code>echo $JIRA_PAT</code>. Check token at <code>id.atlassian.com</code>.</td></tr>
+    <tr><td>Pre-push hook blocking push</td><td>Run <code>dotnet build</code> / <code>npm run lint</code> / <code>tsc --noEmit</code> manually. Fix the error.</td></tr>
+    <tr><td>Wrong repo in multi-repo workspace</td><td>Specify explicitly: <code>@orchestrator build X in services/UserManagement</code></td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════ N. PERSONA FLOWS ══════ -->
+<section id="sec-personas">
+<h1>N. Persona Flows — Who Uses Which Agent?</h1>
+<p>Select a persona below to see the exact agents, slash commands, and MCP tools available to that role. Use the side menu to jump directly to each section.</p>
+
+<!-- ── Developer panel ── -->
+<div id="personaPanelDev">
+  <span class="persona-label persona-label-dev">🧑 Developer — VS Code · Copilot Chat</span>
+
+  <h2 id="sec-persona-dev">N.1 Developer Flow</h2>
+  <p>Developers interact in VS Code via <code>@orchestrator</code> and slash commands. All quality chains (build → tests → review) run automatically — no manual delegation needed.</p>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TD
+    classDef persona  fill:#f0f2f4,stroke:#3c454b,color:#3c454b,font-weight:bold
+    classDef standard fill:#f0f2f4,stroke:#777f87,color:#3c454b
+    classDef output   fill:#e0e3e6,stroke:#777f87,color:#3c454b,font-weight:bold
+
+    Dev["Developer\nVS Code / Copilot Chat"]:::persona
+
+    Dev -->|"build feature"| ORC["@orchestrator\nPlan - Approve - Execute"]:::persona
+    Dev -->|"review code"| REV["@reviewer\n7-dimension review"]:::persona
+    Dev -->|"new microservice"| SCAF["@scaffold\n.NET 10 skeleton"]:::standard
+
+    ORC --> BE["@backend\nDTO - Service - Repo - Controller"]:::standard
+    ORC --> FE["@frontend\nReact 19 - MUI 7 - hooks"]:::standard
+
+    BE --> MIG["@migration\nEF Core schema"]:::standard
+    BE --> BT["@backend-tests\nNUnit 95%+"]:::standard
+    FE --> FT["@frontend-tests\nVitest 90%+"]:::standard
+    FE --> ET["@e2e-tests\nCypress POM"]:::standard
+
+    BT --> REV
+    FT --> REV
+    ET --> REV
+
+    REV -->|"score pass"| DONE["Code merged"]:::output
+    REV -->|"score fail"| FIX["Auto-fix and Re-review\nmax 3 iterations"]:::standard
+    FIX --> REV
+    </div>
+  </div>
+
+  <h3>Slash Commands for Developers</h3>
+  <table>
+    <thead><tr><th>Command</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr><td><code>/explain-project</code></td><td>Onboard to a new repo — understand the stack and patterns in 60 seconds</td></tr>
+      <tr><td><code>/explain-file src/Services/X.cs</code></td><td>Understand any file before touching it</td></tr>
+      <tr><td><code>/generate-code CRUD for UserPreferences</code></td><td>Start building — auto-routes to <code>@backend</code> or <code>@frontend</code></td></tr>
+      <tr><td><code>/generate-tests</code></td><td>Generate tests for the active file</td></tr>
+      <tr><td><code>/review-and-fix-code</code></td><td>Review + fix all uncommitted changes before opening a PR</td></tr>
+      <tr><td><code>/trace-bug</code></td><td>Paste a stack trace → get root cause + file:line fix</td></tr>
+      <tr><td><code>/describe-pr NG-37500</code></td><td>Generate PR title + body from git history + Jira ACs</td></tr>
+      <tr><td><code>/optimize-performance</code></td><td>Find N+1 queries, re-renders, missing memoization in active file</td></tr>
+      <tr><td><code>/add-doc-comments</code></td><td>Add XML doc / JSDoc to public members — no logic changed</td></tr>
+    </tbody>
+  </table>
+
+  <div class="box-info">
+    <strong>Developer entry point:</strong> Always start with <code>@orchestrator plan NG-xxxxx</code> or <code>@orchestrator build …</code>.
+    Builder and worker agents are auto-delegated — you never call <code>@backend</code>, <code>@frontend</code>, or test agents directly.
+  </div>
+</div>
+
+<!-- ── PO / BA panel ── -->
+<hr style="border:none;border-top:1px solid var(--myorg-gray-30);margin:40px 0;">
+<div id="personaPanelPo">
+  <span class="persona-label persona-label-po">📋 Product Owner / BA — VS Code · Jira · Confluence</span>
+
+  <h2 id="sec-persona-po">N.2 Product Owner / BA Flow</h2>
+  <p>POs do not write or review code, but <strong>VS Code is still the recommended client</strong> for running slash commands and agents. No repository checkout or coding knowledge is required — simply open VS Code with Copilot Chat and use the prompt commands below against Jira and Confluence via MCP.</p>
+  <div class="box-info"><strong>GitHub Web Copilot Chat:</strong> Once the <code>private-copilot</code> cloud custom agent is activated for the organization, POs can run the same slash commands directly from <strong>GitHub.com → Copilot Chat</strong> — no VS Code installation needed. Until then, VS Code is required.</div>
+
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+flowchart TD
+    classDef persona  fill:#f0f2f4,stroke:#3c454b,color:#3c454b,font-weight:bold
+    classDef standard fill:#f0f2f4,stroke:#777f87,color:#3c454b
+    classDef output   fill:#e0e3e6,stroke:#777f87,color:#3c454b,font-weight:bold
+
+    PO["Product Owner / BA\nVS Code - Copilot Chat"]:::persona
+
+    PO -->|"plan ticket"| JP["@jira-planner\nJira MCP"]:::persona
+    PO -->|"enrich with standards"| DP["@docs-planner\nJira and Confluence MCP"]:::persona
+    PO -->|"write documentation"| DW["@docs-writer\nConfluence MCP"]:::persona
+    PO -->|"product manual"| PMN["@product-manual\nHTML - GPSR - CRA"]:::persona
+
+    JP --> JIRA["Jira\nget_issue - search_issues\ncreate_issue - update_issue"]:::standard
+    DP --> JIRA
+    DP --> CONF["Confluence\nsearch - get_page"]:::standard
+    DW --> CONF2["Confluence\ncreate_page - update_page\nadd_label - add_comment"]:::standard
+    PMN --> MAN["Standalone HTML Manual\nOrg branding - compliant"]:::output
+
+    JP --> AC["Gherkin ACs\nTODOs - T-shirt estimates"]:::output
+    DP --> PLAN["Enriched Plan\nwith Confluence citations"]:::output
+
+    AC -->|"hand off"| DEV["Developer\n@orchestrator plan NG-xxxxx"]:::output
+    PLAN -->|"hand off"| DEV
+    </div>
+  </div>
+
+  <h3>Slash Commands for PO / BA</h3>
+  <table>
+    <thead><tr><th>Command</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr><td><code>/draft-user-story users want PDF export</code></td><td>Turn a plain-text idea into a Jira Story with Gherkin ACs + T-shirt estimate</td></tr>
+      <tr><td><code>/read-jira-ticket NG-37500</code></td><td>Fetch any ticket and display as a clean formatted card</td></tr>
+      <tr><td><code>/convert-to-gherkin NG-37500</code></td><td>Convert ticket description to Gherkin ACs and write back to Jira</td></tr>
+      <tr><td><code>/sprint-status</code></td><td>Sprint health snapshot — blockers, % done, risk flags</td></tr>
+      <tr><td><code>/find-confluence-page deployment guide</code></td><td>Quick Confluence search — top 5 results with excerpts</td></tr>
+      <tr><td><code>/update-product-manual</code></td><td>Update an existing product manual — gap check → patch → regenerate</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Agents Available to PO / BA</h3>
+  <table>
+    <thead><tr><th>Agent</th><th>Purpose</th><th>Invoke With</th></tr></thead>
+    <tbody>
+      <tr><td><code>@jira-planner</code></td><td>Read + write Jira tickets, Gherkin ACs, T-shirt estimates</td><td><code>@jira-planner plan NG-xxxxx</code></td></tr>
+      <tr><td><code>@docs-planner</code></td><td>Enrich plans with Confluence standards and ADR citations</td><td><code>@docs-planner plan NG-xxxxx</code></td></tr>
+      <tr><td><code>@docs-writer</code></td><td>Create and update Confluence pages with labels</td><td><code>@docs-writer create X page</code></td></tr>
+      <tr><td><code>@product-manual</code></td><td>Generate standalone HTML product manuals — GPSR, PLD, CRA compliant</td><td><code>@product-manual lis.productname v4</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>MCP Tools Available to PO / BA</h3>
+  <table>
+    <thead><tr><th>Agent</th><th>MCP Server</th><th>Tools</th><th>Access</th></tr></thead>
+    <tbody>
+      <tr><td><code>@jira-planner</code></td><td><strong>jira-azure</strong></td><td><code>get_issue</code>, <code>search_issues</code>, <code>create_issue</code>, <code>update_issue</code>, <code>add_comment</code>, <code>transition_issue</code>, <code>list_transitions</code>, <code>import_checklist_template</code></td><td>Read + Write</td></tr>
+      <tr><td><code>@docs-planner</code></td><td><strong>jira-azure</strong> + <strong>confluence-az</strong></td><td>All Jira reads + <code>search</code>, <code>get_page</code></td><td>Read only</td></tr>
+      <tr><td><code>@docs-writer</code></td><td><strong>confluence-az</strong></td><td><code>search</code>, <code>get_page</code>, <code>create_page</code>, <code>update_page</code>, <code>add_label</code>, <code>add_comment</code></td><td>Read + Write</td></tr>
+      <tr><td><code>@product-manual</code></td><td>None (codebase read only)</td><td>Reads repo + generates standalone HTML — no MCP required</td><td>Read only</td></tr>
+    </tbody>
+  </table>
+
+  <div class="persona-handoff">
+    <strong>🔄 PO → Developer Handoff</strong>
+    <ol>
+      <li>PO runs <code>/draft-user-story</code> or <code>@jira-planner plan NG-xxxxx</code> → Gherkin ACs written to Jira</li>
+      <li>Developer picks up: <code>@orchestrator plan NG-xxxxx</code></li>
+      <li><code>@orchestrator</code> reads the Jira ticket via Jira MCP → builds + tests + reviews automatically</li>
+      <li><code>@docs-writer</code> writes delivery notes to Confluence</li>
+      <li>PO reviews in Confluence → transitions ticket in Jira via <code>@jira-planner</code></li>
+      <li>PO generates or updates product documentation: <code>@product-manual lis.productname v4</code></li>
+    </ol>
+  </div>
+</div>
+
+</section>
+
+<!-- ══════ M. SUMMARY TABLES ══════ -->
+<section id="sec-summary">
+<h1>M. Summary Tables</h1>
+
+<h2>All 14 Agents</h2>
+<table>
+  <thead><tr><th>Category</th><th>Agent</th><th>Invocable</th><th>Invoke With</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Orchestrator</strong></td><td><code>@orchestrator</code></td><td>✅</td><td><code>@orchestrator plan NG-xxxxx</code></td></tr>
+    <tr><td rowspan="3"><strong>Planners</strong></td><td><code>@planner</code></td><td>✅</td><td><code>@planner analyze NG-xxxxx</code></td></tr>
+    <tr><td><code>@jira-planner</code></td><td>✅</td><td><code>@jira-planner plan NG-xxxxx</code></td></tr>
+    <tr><td><code>@docs-planner</code></td><td>✅</td><td><code>@docs-planner plan NG-xxxxx</code></td></tr>
+    <tr><td rowspan="5"><strong>Builders</strong></td><td><code>@backend</code></td><td>✅</td><td><code>@backend</code> or via orchestrator</td></tr>
+    <tr><td><code>@frontend</code></td><td>✅</td><td><code>@frontend</code> or via orchestrator</td></tr>
+    <tr><td><code>@scaffold</code></td><td>✅</td><td><code>@scaffold new X</code></td></tr>
+    <tr><td><code>@migration</code></td><td>✅</td><td><code>@migration</code> or auto-triggered</td></tr>
+    <tr><td><code>@reviewer</code></td><td>✅</td><td><code>@reviewer --full src/</code></td></tr>
+    <tr><td rowspan="2"><strong>Knowledge</strong></td><td><code>@docs-writer</code></td><td>✅</td><td><code>@docs-writer create … page</code></td></tr>
+    <tr><td><code>@product-manual</code></td><td>✅</td><td><code>@product-manual lis.rackmgmt v4</code></td></tr>
+    <tr><td rowspan="3"><strong>Workers</strong></td><td><code>@backend-tests</code></td><td>✅</td><td>Auto-invoked or directly</td></tr>
+    <tr><td><code>@frontend-tests</code></td><td>✅</td><td>Auto-invoked or directly</td></tr>
+    <tr><td><code>@e2e-tests</code></td><td>✅</td><td>Auto-invoked or directly</td></tr>
+  </tbody>
+</table>
+
+<h2>All 14 Slash Commands</h2>
+<table>
+  <thead><tr><th>Command</th><th>Argument</th><th>Roles</th></tr></thead>
+  <tbody>
+    <tr><td><code>/explain-project</code></td><td>—</td><td>Dev · Lead · PO</td></tr>
+    <tr><td><code>/describe-pr</code></td><td>optional NG-xxxx</td><td>Dev</td></tr>
+    <tr><td><code>/generate-code</code></td><td>description</td><td>Dev</td></tr>
+    <tr><td><code>/generate-tests</code></td><td>optional path</td><td>Dev</td></tr>
+    <tr><td><code>/update-copilot-instructions</code></td><td>--scan or file §n</td><td>Lead</td></tr>
+    <tr><td><code>/read-jira-ticket</code></td><td>NG-xxxx</td><td>PO · Dev</td></tr>
+    <tr><td><code>/sprint-status</code></td><td>optional sprint</td><td>SM · PM</td></tr>
+    <tr><td><code>/find-confluence-page</code></td><td>keywords</td><td>All</td></tr>
+    <tr><td><code>/update-product-manual</code></td><td>—</td><td>Lead</td></tr>
+    <tr><td><code>/product-flow-screenshots</code></td><td>—</td><td>Dev</td></tr>
+  </tbody>
+</table>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="doc-footer">
+  <p>Copilot Agent System — Copilot Agent System v3.1.0 · Developer Manual · Generated May 2026 · Stack: .NET 10 + React 19 + TypeScript + MUI 7 · 14 Agents · 26 Skills · 4 Hooks · 14 Prompts · 2-Layer Memory</p>
+  <p>© 2026 Org Austria GmbH. This document was AI-generated and reviewed by engineering. Print via browser Print → Save as PDF.</p>
+</footer>
+
+</body>
+</html>
