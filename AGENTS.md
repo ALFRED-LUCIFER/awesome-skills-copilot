@@ -5,13 +5,13 @@
 
 ## Repository Purpose
 
-A production-ready collection of **15 specialized AI agents**, **28 skills**, **5 hooks**, and **15 prompt templates** for GitHub Copilot and Claude Code. Designed for .NET + React fullstack teams but adaptable to any stack.
+A production-ready collection of **21 specialized AI agents**, **31 skills**, **5 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code. Designed for .NET + React fullstack teams but adaptable to any stack.
 
 ## Directory Map
 
 ```
-├── agents/                  ← 15 Copilot agent definitions (.agent.md)
-├── skills/                  ← 28 self-contained skill folders (SKILL.md + assets)
+├── agents/                  ← 21 Copilot agent definitions (.agent.md)
+├── skills/                  ← 31 self-contained skill folders (SKILL.md + assets)
 ├── prompts/                 ← 15 reusable prompt templates (.prompt.md)
 ├── hooks/                   ← 5 automated session hooks (hooks.json + scripts)
 ├── instructions/            ← Auto-injected coding standards (.instructions.md)
@@ -24,7 +24,7 @@ A production-ready collection of **15 specialized AI agents**, **28 skills**, **
 └── README.md                ← Project overview and catalog tables
 ```
 
-## Agents (15)
+## Agents (21)
 
 | Agent | File | Purpose |
 |-------|------|---------|
@@ -43,8 +43,14 @@ A production-ready collection of **15 specialized AI agents**, **28 skills**, **
 | `@e2e-tests` | `agents/e2e-tests.agent.md` | Cypress E2E with strict POM |
 | `@playwright-e2e` | `agents/playwright-e2e.agent.md` | Playwright E2E — cross-browser, a11y |
 | `@migration` | `agents/migration.agent.md` | EF Core migration specialist |
+| `@k8s-deployer` | `agents/k8s-deployer.agent.md` | Kubernetes manifest generator and deployer |
+| `@k8s-troubleshoot` | `agents/k8s-troubleshoot.agent.md` | Kubernetes cluster diagnostician |
+| `@helm-engineer` | `agents/helm-engineer.agent.md` | Helm 4 chart specialist |
+| `@azure-deployer` | `agents/azure-deployer.agent.md` | Azure infrastructure provisioning (AKS, ACR, Bicep, Terraform) |
+| `@foundry-agent` | `agents/foundry-agent.agent.md` | Microsoft Foundry Agent Service specialist |
+| `@pipeline-engineer` | `agents/pipeline-engineer.agent.md` | CI/CD pipeline generator (GitHub Actions, Azure DevOps, GitLab CI) |
 
-## Skills (28)
+## Skills (31)
 
 | Skill | Folder | Purpose |
 |-------|--------|---------|
@@ -76,6 +82,9 @@ A production-ready collection of **15 specialized AI agents**, **28 skills**, **
 | `review-and-fix` | `skills/review-and-fix/` | Fix-first code review |
 | `security-review` | `skills/security-review/` | OWASP-aligned security audit |
 | `trace-bug` | `skills/trace-bug/` | Structured root-cause analysis |
+| `kubernetes-manifests` | `skills/kubernetes-manifests/` | Production-ready K8s manifest templates |
+| `helm-charts` | `skills/helm-charts/` | Helm 4 chart scaffolding templates |
+| `azure-infrastructure` | `skills/azure-infrastructure/` | Bicep + Terraform IaC templates for Azure |
 
 ## Hooks (5)
 

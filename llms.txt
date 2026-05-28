@@ -19,6 +19,12 @@
 - name: e2e-tests | path: agents/e2e-tests.agent.md | description: Cypress E2E test generator with strict POM
 - name: playwright-e2e | path: agents/playwright-e2e.agent.md | description: Playwright E2E — cross-browser coverage, accessibility audits
 - name: migration | path: agents/migration.agent.md | description: EF Core migration specialist — rollback-safe Up/Down
+- name: k8s-deployer | path: agents/k8s-deployer.agent.md | description: Kubernetes manifest generator — Deployment, Service, Ingress, HPA, Kustomize
+- name: k8s-troubleshoot | path: agents/k8s-troubleshoot.agent.md | description: Kubernetes cluster diagnostician — CrashLoopBackOff, OOMKilled, pending pods
+- name: helm-engineer | path: agents/helm-engineer.agent.md | description: Helm 4 chart specialist — create, template, lint, package, OCI registry
+- name: azure-deployer | path: agents/azure-deployer.agent.md | description: Azure infrastructure provisioning — AKS, ACR, Bicep, Terraform, azd CLI
+- name: foundry-agent | path: agents/foundry-agent.agent.md | description: Microsoft Foundry Agent Service — prompt, workflow, hosted agents
+- name: pipeline-engineer | path: agents/pipeline-engineer.agent.md | description: CI/CD pipeline generator — GitHub Actions, Azure DevOps, GitLab CI
 
 ## Skills
 
@@ -50,6 +56,9 @@
 - name: review-and-fix | path: skills/review-and-fix/SKILL.md | description: Fix-first code review
 - name: security-review | path: skills/security-review/SKILL.md | description: OWASP-aligned security audit
 - name: trace-bug | path: skills/trace-bug/SKILL.md | description: Structured root-cause analysis
+- name: kubernetes-manifests | path: skills/kubernetes-manifests/SKILL.md | description: Production-ready K8s manifest templates
+- name: helm-charts | path: skills/helm-charts/SKILL.md | description: Helm 4 chart scaffolding templates
+- name: azure-infrastructure | path: skills/azure-infrastructure/SKILL.md | description: Bicep and Terraform IaC templates for Azure
 
 ## Hooks
 
@@ -64,3 +73,4 @@
 - name: fullstack-dotnet-react | path: plugins/fullstack-dotnet-react/ | description: Full-stack .NET + React development bundle
 - name: testing-suite | path: plugins/testing-suite/ | description: Complete testing toolkit — unit, integration, E2E
 - name: planning-suite | path: plugins/planning-suite/ | description: Planning, review, and documentation bundle
+- name: devops-cloud | path: plugins/devops-cloud/ | description: DevOps and cloud infrastructure — K8s, Helm, Azure, Foundry, CI/CD

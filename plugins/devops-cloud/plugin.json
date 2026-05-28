@@ -1,0 +1,21 @@
+{
+  "name": "devops-cloud",
+  "description": "DevOps & Cloud infrastructure bundle — Kubernetes deployment, Helm chart management, Azure infrastructure provisioning, Microsoft Foundry AI agents, and CI/CD pipeline generation with production-ready templates and security best practices",
+  "version": "1.0.0",
+  "keywords": ["kubernetes", "k8s", "helm", "azure", "aks", "devops", "cicd", "foundry", "bicep", "terraform", "github-actions", "pipeline"],
+  "author": { "name": "Awesome Skills Copilot Community" },
+  "license": "MIT",
+  "agents": [
+    "../../agents/k8s-deployer.agent.md",
+    "../../agents/k8s-troubleshoot.agent.md",
+    "../../agents/helm-engineer.agent.md",
+    "../../agents/azure-deployer.agent.md",
+    "../../agents/foundry-agent.agent.md",
+    "../../agents/pipeline-engineer.agent.md"
+  ],
+  "skills": [
+    "../../skills/kubernetes-manifests/",
+    "../../skills/helm-charts/",
+    "../../skills/azure-infrastructure/"
+  ]
+}

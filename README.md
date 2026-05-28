@@ -1,6 +1,6 @@
 # 🤖 Awesome Skills Copilot
 
-A production-ready collection of **15 AI agents**, **28 skills**, **5 hooks**, **3 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code.
+A production-ready collection of **21 AI agents**, **31 skills**, **5 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code.
 
 > **Works with**: GitHub Copilot (VS Code) · Claude Code · Any AI assistant that reads `.agent.md` / `SKILL.md` files
 
