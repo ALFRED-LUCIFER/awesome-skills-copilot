@@ -1,181 +1,52 @@
 ---
 name: playwright-test-gen
-description: Generate Playwright test specs for your project web applications — page objects, fixtures, API mocking, and accessibility checks
+description: Generate Playwright test specs for web applications — page objects, fixtures, API mocking, and accessibility checks
 ---
 
-# Playwright Test Generation Skill
-
-Generate end-to-end tests using Playwright for your project React frontends. Complements existing Cypress E2E tests with cross-browser coverage and accessibility testing.
+# Playwright Test Generation
 
 ## When to Use
 
-- Cross-browser testing (Chromium, Firefox, WebKit)
-- Accessibility audits (built-in `@axe-core/playwright`)
+- Cross-browser E2E testing (Chromium, Firefox, WebKit)
+- Accessibility audits with `@axe-core/playwright`
 - Visual regression tests (screenshot comparison)
-- API request interception (more powerful than Cypress)
-- When the team decides to migrate from Cypress to Playwright
+- API request interception and mocking
+- Migrating from Cypress to Playwright
 
-## Page Object Pattern
+## Rules
 
-```typescript
-// pages/{Feature}Page.ts
-import { type Locator, type Page, expect } from '@playwright/test';
+1. Page Object Model: one class per page/feature in `pages/{Feature}Page.ts`
+2. Use `data-testid` selectors via `page.getByTestId()` — never CSS class selectors
+3. Use role-based locators (`getByRole`, `getByLabel`) for a11y-friendly selectors
+4. Fixtures: extend `test` with custom fixtures for auth, API mocking, page objects
+5. API mocking: `page.route()` to intercept and mock backend responses
+6. Each spec: arrange (navigate + mock) → act (interact) → assert (expect)
+7. Accessibility: include axe-core scan in at least one test per page
+8. Visual regression: `expect(page).toHaveScreenshot()` for critical UI states
+9. Parallel execution: tests must be independent (no shared state between specs)
+10. Replace `{Feature}/{feature}` with entity name (PascalCase/camelCase)
 
-export class {Feature}Page {
-  readonly page: Page;
-  readonly heading: Locator;
-  readonly createButton: Locator;
-  readonly table: Locator;
-  readonly searchInput: Locator;
+## Steps
 
-  constructor(page: Page) {
-    this.page = page;
-    this.heading = page.getByRole('heading', { name: /{feature}/i });
-    this.createButton = page.getByTestId('{feature}-create-button');
-    this.table = page.getByTestId('{feature}-table');
-    this.searchInput = page.getByTestId('{feature}-search-input');
-  }
+1. **Create page object** — `pages/{Feature}Page.ts` with locators + action methods
+2. **Create fixtures** — `fixtures/{feature}.fixture.ts` extending base test
+3. **Create API mocks** — `mocks/{feature}.mock.ts` with typed response data
+4. **Write CRUD specs** — `{feature}.spec.ts` covering list, create, edit, delete flows
+5. **Add a11y test** — axe-core scan within spec or dedicated `{feature}.a11y.spec.ts`
+6. **Add visual test** — screenshot assertions for key states
+7. **Validate** — `npx playwright test --project=chromium` passes
 
-  async goto() {
-    await this.page.goto('/{feature}');
-    await expect(this.heading).toBeVisible();
-  }
+## File Structure
 
-  async create(data: Record<string, string>) {
-    await this.createButton.click();
-    for (const [field, value] of Object.entries(data)) {
-      await this.page.getByTestId(`{feature}-${field}-input`).fill(value);
-    }
-    await this.page.getByTestId('{feature}-save-button').click();
-  }
-
-  async search(query: string) {
-    await this.searchInput.fill(query);
-    await this.page.keyboard.press('Enter');
-  }
-
-  async getRowCount(): Promise<number> {
-    return this.table.getByRole('row').count() - 1; // minus header
-  }
-}
+```
+e2e/
+├── pages/{Feature}Page.ts
+├── fixtures/{feature}.fixture.ts
+├── mocks/{feature}.mock.ts
+├── specs/{feature}.spec.ts
+└── specs/{feature}.a11y.spec.ts
 ```
 
-## Test Spec Pattern
+## Reference
 
-```typescript
-// tests/{feature}.spec.ts
-import { test, expect } from '@playwright/test';
-import { {Feature}Page } from '../pages/{Feature}Page';
-
-test.describe('{Feature} CRUD', () => {
-  let featurePage: {Feature}Page;
-
-  test.beforeEach(async ({ page }) => {
-    // Mock API responses
-    await page.route('**/api/{feature}/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ data: [], success: true, message: null }),
-      });
-    });
-
-    featurePage = new {Feature}Page(page);
-    await featurePage.goto();
-  });
-
-  test('displays the {feature} list', async () => {
-    await expect(featurePage.heading).toBeVisible();
-    await expect(featurePage.table).toBeVisible();
-  });
-
-  test('creates a new {feature}', async () => {
-    await featurePage.create({ name: 'Test {Feature}' });
-    await expect(featurePage.page.getByText('Test {Feature}')).toBeVisible();
-  });
-
-  test('search filters results', async ({ page }) => {
-    await featurePage.search('test');
-    // Verify API was called with search param
-    const request = page.waitForRequest((req) =>
-      req.url().includes('/api/{feature}') && req.url().includes('search=test')
-    );
-    await expect(request).toBeTruthy();
-  });
-});
-```
-
-## Accessibility Test Pattern
-
-```typescript
-// tests/{feature}-a11y.spec.ts
-import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-import { {Feature}Page } from '../pages/{Feature}Page';
-
-test.describe('{Feature} Accessibility', () => {
-  test('meets WCAG 2.2 AA standards', async ({ page }) => {
-    const featurePage = new {Feature}Page(page);
-    await featurePage.goto();
-
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
-      .analyze();
-
-    expect(results.violations).toEqual([]);
-  });
-});
-```
-
-## Configuration
-
-```typescript
-// playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
-
-export default defineConfig({
-  testDir: './tests',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [['html'], ['json', { outputFile: 'test-results.json' }]],
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-  },
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-  ],
-  webServer: {
-    command: 'npm run dev',
-    port: 3000,
-    reuseExistingServer: !process.env.CI,
-  },
-});
-```
-
-## Selectors — data-testid First
-
-Always use `data-testid` selectors (GUARDRAILS § O6):
-```typescript
-// ✅ Good
-page.getByTestId('order-save-button')
-page.getByRole('heading', { name: /orders/i })
-
-// ❌ Bad — fragile selectors
-page.locator('.MuiButton-root')
-page.locator('#save-btn')
-page.locator('button:nth-child(2)')
-```
-
-## Jira Integration
-
-When generating tests from Jira tickets, map Gherkin scenarios to Playwright tests:
-```
-Scenario: User creates a new order
-  → test('creates a new order', async ({ page }) => { ... })
-```
+See [./examples.md](./examples.md) for complete page object, fixture, mock, and spec templates.
