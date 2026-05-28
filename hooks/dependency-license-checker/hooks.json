@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/dependency-license-checker/check-licenses.sh",
+        "cwd": ".",
+        "env": {
+          "BLOCKED_LICENSES": "GPL-3.0,AGPL-3.0,SSPL-1.0,EUPL-1.1",
+          "SCAN_FILES": "package.json,*.csproj",
+          "MODE": "warn"
+        },
+        "timeoutSec": 60
+      }
+    ]
+  }
+}

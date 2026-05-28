@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/memory-snapshot/snapshot.sh",
+        "cwd": ".",
+        "env": {
+          "SNAPSHOT_SCOPE": "decisions,files-changed,key-findings",
+          "MEMORY_PATH": "memories/repo/sessions"
+        },
+        "timeoutSec": 15
+      }
+    ]
+  }
+}

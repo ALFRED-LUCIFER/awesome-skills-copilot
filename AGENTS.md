@@ -5,7 +5,7 @@
 
 ## Repository Purpose
 
-A production-ready collection of **21 specialized AI agents**, **32 skills**, **5 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code. Designed for .NET + React fullstack teams but adaptable to any stack.
+A production-ready collection of **25 specialized AI agents**, **35 skills**, **7 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code. Designed for .NET + React fullstack teams but adaptable to any stack.
 
 ## Directory Map
 
@@ -24,7 +24,7 @@ A production-ready collection of **21 specialized AI agents**, **32 skills**, **
 └── README.md                ← Project overview and catalog tables
 ```
 
-## Agents (21)
+## Agents (25)
 
 | Agent | File | Purpose |
 |-------|------|---------|
@@ -49,8 +49,12 @@ A production-ready collection of **21 specialized AI agents**, **32 skills**, **
 | `@azure-deployer` | `agents/azure-deployer.agent.md` | Azure infrastructure provisioning (AKS, ACR, Bicep, Terraform) |
 | `@foundry-agent` | `agents/foundry-agent.agent.md` | Microsoft Foundry Agent Service specialist |
 | `@pipeline-engineer` | `agents/pipeline-engineer.agent.md` | CI/CD pipeline generator (GitHub Actions, Azure DevOps, GitLab CI) |
+| `@tdd-red` | `agents/tdd-red.agent.md` | TDD Red phase — writes failing tests before implementation |
+| `@tdd-green` | `agents/tdd-green.agent.md` | TDD Green phase — minimal code to make tests pass |
+| `@tdd-refactor` | `agents/tdd-refactor.agent.md` | TDD Refactor phase — clean up while keeping green |
+| `@accessibility` | `agents/accessibility.agent.md` | WCAG 2.2 AA auditor, fixer, and test generator |
 
-## Skills (32)
+## Skills (35)
 
 | Skill | Folder | Purpose |
 |-------|--------|---------|
@@ -86,8 +90,11 @@ A production-ready collection of **21 specialized AI agents**, **32 skills**, **
 | `helm-charts` | `skills/helm-charts/` | Helm 4 chart scaffolding templates |
 | `azure-infrastructure` | `skills/azure-infrastructure/` | Bicep + Terraform IaC templates for Azure |
 | `markitdown-convert` | `skills/markitdown-convert/` | Convert files (PDF, Word, Excel, images, audio) to Markdown for LLM consumption |
+| `token-budget-loader` | `skills/token-budget-loader/` | Token-aware skill loading with tiered detail levels |
+| `skill-pipeline` | `skills/skill-pipeline/` | Declarative skill composition DAGs |
+| `skill-telemetry` | `skills/skill-telemetry/` | Skill invocation metrics and optimization |
 
-## Hooks (5)
+## Hooks (7)
 
 | Hook | Folder | Trigger |
 |------|--------|---------|
@@ -96,6 +103,8 @@ A production-ready collection of **21 specialized AI agents**, **32 skills**, **
 | `secrets-scanner` | `hooks/secrets-scanner/` | Scans for leaked secrets |
 | `session-logger` | `hooks/session-logger/` | Logs session activity |
 | `tool-guardian` | `hooks/tool-guardian/` | Guards tool usage policies |
+| `memory-snapshot` | `hooks/memory-snapshot/` | Session-end context capture for continuity |
+| `dependency-license-checker` | `hooks/dependency-license-checker/` | Scans for copyleft/blocked licenses |
 
 ## Key Files
 
