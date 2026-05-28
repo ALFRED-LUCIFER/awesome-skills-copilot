@@ -59,6 +59,7 @@
 - name: kubernetes-manifests | path: skills/kubernetes-manifests/SKILL.md | description: Production-ready K8s manifest templates
 - name: helm-charts | path: skills/helm-charts/SKILL.md | description: Helm 4 chart scaffolding templates
 - name: azure-infrastructure | path: skills/azure-infrastructure/SKILL.md | description: Bicep and Terraform IaC templates for Azure
+- name: markitdown-convert | path: skills/markitdown-convert/SKILL.md | description: Convert files (PDF, Word, Excel, images, audio) to Markdown for LLM consumption
 
 ## Hooks
 

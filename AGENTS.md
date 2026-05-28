@@ -5,13 +5,13 @@
 
 ## Repository Purpose
 
-A production-ready collection of **21 specialized AI agents**, **31 skills**, **5 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code. Designed for .NET + React fullstack teams but adaptable to any stack.
+A production-ready collection of **21 specialized AI agents**, **32 skills**, **5 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code. Designed for .NET + React fullstack teams but adaptable to any stack.
 
 ## Directory Map
 
 ```
 ├── agents/                  ← 21 Copilot agent definitions (.agent.md)
-├── skills/                  ← 31 self-contained skill folders (SKILL.md + assets)
+├── skills/                  ← 32 self-contained skill folders (SKILL.md + assets)
 ├── prompts/                 ← 15 reusable prompt templates (.prompt.md)
 ├── hooks/                   ← 5 automated session hooks (hooks.json + scripts)
 ├── instructions/            ← Auto-injected coding standards (.instructions.md)
@@ -50,7 +50,7 @@ A production-ready collection of **21 specialized AI agents**, **31 skills**, **
 | `@foundry-agent` | `agents/foundry-agent.agent.md` | Microsoft Foundry Agent Service specialist |
 | `@pipeline-engineer` | `agents/pipeline-engineer.agent.md` | CI/CD pipeline generator (GitHub Actions, Azure DevOps, GitLab CI) |
 
-## Skills (31)
+## Skills (32)
 
 | Skill | Folder | Purpose |
 |-------|--------|---------|
@@ -85,6 +85,7 @@ A production-ready collection of **21 specialized AI agents**, **31 skills**, **
 | `kubernetes-manifests` | `skills/kubernetes-manifests/` | Production-ready K8s manifest templates |
 | `helm-charts` | `skills/helm-charts/` | Helm 4 chart scaffolding templates |
 | `azure-infrastructure` | `skills/azure-infrastructure/` | Bicep + Terraform IaC templates for Azure |
+| `markitdown-convert` | `skills/markitdown-convert/` | Convert files (PDF, Word, Excel, images, audio) to Markdown for LLM consumption |
 
 ## Hooks (5)
 
