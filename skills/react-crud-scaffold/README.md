@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Provides ready-to-use code templates for generating complete CRUD features in Copilot Agent System React frontend applications. Uses `{Feature}/{feature}` placeholders and integrates with platform libraries.
+Provides ready-to-use code templates for generating complete CRUD features in your project React frontend applications. Uses `{Feature}/{feature}` placeholders and integrates with platform libraries.
 
 ## When to Use
 
@@ -25,7 +25,7 @@ Provides ready-to-use code templates for generating complete CRUD features in Co
 
 ## Dependencies
 
-- `@myorg/ng-lib-react-platform-mui`
+- `@your-org/platform-lib`
 - TanStack Query
 - react-hook-form
 - MUI 7

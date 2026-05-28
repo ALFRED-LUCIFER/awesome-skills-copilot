@@ -1,11 +1,11 @@
 ---
 name: explain-file
-description: Deep file analysis patterns — type detection, layer mapping, dependency tracing, and test counterpart lookup for Copilot Agent System codebases
+description: Deep file analysis patterns — type detection, layer mapping, dependency tracing, and test counterpart lookup for your project codebases
 ---
 
 # Explain File Skill
 
-Structured analysis of a single file in a Copilot Agent System repository.
+Structured analysis of a single file in a your project repository.
 
 ## .NET File Type Detection
 

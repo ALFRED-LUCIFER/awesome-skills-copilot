@@ -1,13 +1,13 @@
 ---
 name: generate-code
-description: Generate production-ready code using Copilot Agent System standards — routes to @backend (.NET/C#) or @frontend (React/TypeScript) based on context
+description: Generate production-ready code using your project standards — routes to @backend (.NET/C#) or @frontend (React/TypeScript) based on context
 argument-hint: Describe what you want to generate, e.g. "CRUD for Machine entity" or "MachineTable component with filter"
 agent: agent
 model: Claude Sonnet 4.6 (copilot)
 tools: [search/codebase, edit/editFiles, execute/getTerminalOutput, execute/runInTerminal, read/terminalLastCommand, read/terminalSelection, todo, agent, vscode/memory, vscode/askQuestions]
 ---
 
-Generate production-ready code following Copilot Agent System standards.
+Generate production-ready code following your project standards.
 
 **Request**: `${input:request:Describe what to generate, e.g. "CRUD for Machine entity" or "MachineTable component"}`
 

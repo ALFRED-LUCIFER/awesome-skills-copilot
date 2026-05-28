@@ -1,12 +1,12 @@
 # Harness Creator
 
-A validation and scaffolding skill for auditing and bootstrapping agent harnesses in Copilot Agent System project repositories.
+A validation and scaffolding skill for auditing and bootstrapping agent harnesses in your project project repositories.
 
 Scores the five harness subsystems and creates any missing files from templates calibrated for the `.NET 10 + React/TypeScript` stack.
 
 ## Install
 
-Already available via `.github-private` — no separate install needed.
+Already available via `awesome-skills-copilot` — no separate install needed.
 
 ## Use
 

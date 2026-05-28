@@ -1,6 +1,6 @@
 # playwright-test-gen
 
-> Generate Playwright test specs for Copilot Agent System web applications — page objects, fixtures, API mocking, and accessibility checks.
+> Generate Playwright test specs for your project web applications — page objects, fixtures, API mocking, and accessibility checks.
 
 ## Purpose
 

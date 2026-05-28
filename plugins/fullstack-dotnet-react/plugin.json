@@ -1,0 +1,22 @@
+{
+  "name": "fullstack-dotnet-react",
+  "description": "Full-stack .NET + React development bundle — backend CRUD generator, frontend component builder, migration specialist, and service scaffolder with mandatory quality chains",
+  "version": "1.0.0",
+  "keywords": ["dotnet", "react", "fullstack", "crud", "typescript", "mui"],
+  "author": { "name": "Awesome Skills Copilot Community" },
+  "license": "MIT",
+  "agents": [
+    "../../agents/backend.agent.md",
+    "../../agents/frontend.agent.md",
+    "../../agents/scaffold.agent.md",
+    "../../agents/migration.agent.md",
+    "../../agents/orchestrator.agent.md"
+  ],
+  "skills": [
+    "../../skills/dotnet-crud-scaffold/",
+    "../../skills/react-crud-scaffold/",
+    "../../skills/dotnet-namespace-detect/",
+    "../../skills/dotnet-quality-chain/",
+    "../../skills/react-quality-chain/"
+  ]
+}

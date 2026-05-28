@@ -28,4 +28,4 @@
 - **npm/NuGet additions without approval**: Agents must ask before adding dependencies.
 
 ---
-*Promoted from project-level gotchas. Update via PR to .github-private.*
+*Promoted from project-level gotchas. Update via PR to awesome-skills-copilot.*

@@ -82,7 +82,7 @@ Return JSON: { panelist: "security", findings: [...], summary: "..." }
 ### Architecture Judge prompt:
 ```
 You are an Architecture Judge performing a focused architecture review.
-Review the following [frontend/backend] code against the Copilot Agent System platform patterns:
+Review the following [frontend/backend] code against the your project platform patterns:
 - Backend: Controller→Service→Repository layering, BaseResponse<T>, AsNoTracking, dual DbContext
 - Frontend: useXxxController pattern, no state hooks in page components, no cross-domain imports,
   domain structure src/domain/{feature}/hooks|components|types

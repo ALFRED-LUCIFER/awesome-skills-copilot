@@ -1,6 +1,6 @@
 ---
 name: doc-comments
-description: Add XML doc comments (C#) or JSDoc (TypeScript/TSX) to public/exported members following Copilot Agent System GUARDRAILS Output Contract § O5
+description: Add XML doc comments (C#) or JSDoc (TypeScript/TSX) to public/exported members following your project GUARDRAILS Output Contract § O5
 ---
 
 # Doc Comments Skill

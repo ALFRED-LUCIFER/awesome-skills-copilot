@@ -24,4 +24,4 @@
 - E2E: Cypress 13 with POM pattern
 
 ---
-*Updated by developers via PR to .github-private. Agents reference but do not modify.*
+*Updated by developers via PR to awesome-skills-copilot. Agents reference but do not modify.*

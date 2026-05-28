@@ -1,6 +1,6 @@
 # Prompts
 
-> Slash commands for Copilot Agent System Copilot Agent System. Each `.prompt.md` file defines a reusable prompt accessible via `/command-name` in VS Code Copilot Chat.
+> Slash commands for your project your project. Each `.prompt.md` file defines a reusable prompt accessible via `/command-name` in VS Code Copilot Chat.
 
 ## All Prompts (14)
 
@@ -18,5 +18,5 @@
 | [review](review.prompt.md) | `/review` | Quick code review via Vision (@reviewer) — all 7 dimensions | Tech Lead |
 | [scaffold](scaffold.prompt.md) | `/scaffold` | Scaffold new .NET 10 microservice (Dum-E @scaffold) | Developer |
 | [sprint-status](sprint-status.prompt.md) | `/sprint-status` | Sprint health snapshot — counts, blockers, % done | PM |
-| [update-copilot-instructions](update-copilot-instructions.prompt.md) | `/update-copilot-instructions` | Maintain .github/instructions/ files | Tech Lead |
+| [update-copilot-instructions](update-copilot-instructions.prompt.md) | `/update-copilot-instructions` | Maintain  files | Tech Lead |
 | [update-product-manual](update-product-manual.prompt.md) | `/update-product-manual` | Update existing Org product manual with gap check | Documentation |

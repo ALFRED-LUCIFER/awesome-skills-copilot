@@ -1,15 +1,30 @@
 {
-  "name": "private-copilot-tooling",
-  "version": "3.3.0",
-  "description": "Validation and marketplace tooling for the private-copilot VS Code Copilot plugin.",
-  "private": true,
+  "name": "awesome-skills-copilot",
+  "version": "4.0.0",
+  "description": "Production-ready AI agents, skills, hooks, and plugins for GitHub Copilot and Claude Code. 15 agents, 28 skills, 5 hooks, 3 plugins.",
+  "private": false,
   "type": "module",
   "scripts": {
+    "start": "npm run validate && npm run build",
     "validate": "node eng/validate-plugin.mjs && node eng/validate-skills.mjs",
     "validate:plugin": "node eng/validate-plugin.mjs",
     "validate:skills": "node eng/validate-skills.mjs",
+    "skill:validate": "node eng/validate-skills.mjs",
+    "plugin:validate": "node eng/validate-plugin.mjs",
+    "build": "node eng/generate-marketplace.mjs",
     "marketplace": "node eng/generate-marketplace.mjs"
   },
+  "keywords": [
+    "copilot",
+    "agents",
+    "skills",
+    "claude-code",
+    "github-copilot",
+    "dotnet",
+    "react",
+    "ai-agents"
+  ],
+  "license": "MIT",
   "engines": {
     "node": ">=18"
   }

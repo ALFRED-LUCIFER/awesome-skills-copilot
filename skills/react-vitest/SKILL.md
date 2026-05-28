@@ -1,7 +1,7 @@
 ---
 name: react-vitest
 description: >
-  Vitest + React Testing Library test templates for Copilot Agent System frontend features.
+  Vitest + React Testing Library test templates for your project frontend features.
   Contains: controller hook tests, dialog controller tests, query tests (single + list),
   mutation tests (with captured onSuccess), utility function tests, page component tests,
   dialog component tests, table component tests, and mock data factory pattern.
@@ -260,7 +260,7 @@ const mockInvalidateQueries = vi.fn();
 const mockShow = vi.fn();
 let capturedOnSuccess: Function | undefined;
 
-vi.mock('@myorg/ng-lib-react-platform-mui', () => ({
+vi.mock('@your-org/platform-lib', () => ({
   useMutation: ({ onSuccess }) => {
     capturedOnSuccess = onSuccess;
     return { mutate: vi.fn(), mutateAsync: vi.fn(), isPending: false };
@@ -330,7 +330,7 @@ describe('useDeleteFeatureMutation', () => {
 const mockShow = vi.fn();
 let capturedOnError: ((error: Error) => void) | undefined;
 
-vi.mock('@myorg/ng-lib-react-platform-mui', () => ({
+vi.mock('@your-org/platform-lib', () => ({
   useMutation: ({ onSuccess, onError }: { onSuccess?: Function; onError?: (e: Error) => void }) => {
     capturedOnSuccess = onSuccess;
     capturedOnError = onError;

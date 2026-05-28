@@ -1,6 +1,6 @@
 # create-adr
 
-> Create an Architectural Decision Record following the Copilot Agent System template — integrates with Confluence for persistence.
+> Create an Architectural Decision Record following the your project template — integrates with Confluence for persistence.
 
 ## Purpose
 

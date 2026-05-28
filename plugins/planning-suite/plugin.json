@@ -1,0 +1,26 @@
+{
+  "name": "planning-suite",
+  "description": "Planning, review, and documentation bundle — orchestrator, planners, reviewer with multi-model panel, and documentation agents",
+  "version": "1.0.0",
+  "keywords": ["planning", "review", "documentation", "jira", "confluence", "gherkin"],
+  "author": { "name": "Awesome Skills Copilot Community" },
+  "license": "MIT",
+  "agents": [
+    "../../agents/orchestrator.agent.md",
+    "../../agents/planner.agent.md",
+    "../../agents/jira-planner.agent.md",
+    "../../agents/docs-planner.agent.md",
+    "../../agents/docs-writer.agent.md",
+    "../../agents/reviewer.agent.md"
+  ],
+  "skills": [
+    "../../skills/create-adr/",
+    "../../skills/conventional-commit/",
+    "../../skills/gherkin-format/",
+    "../../skills/jira-gherkin-convert/",
+    "../../skills/jira-user-story-draft/",
+    "../../skills/code-review-pipeline/",
+    "../../skills/review-and-fix/",
+    "../../skills/confluence-content-guide/"
+  ]
+}

@@ -1,4 +1,4 @@
-# Copilot Agent System — Copilot Agent System v3.4.0
+# Awesome Skills Copilot — Architecture Guide v4.0.0
 
 > **15 specialized AI agents** orchestrated as a team. One entry point: `@orchestrator`. Mandatory quality gates enforce tests, review, and migrations automatically — you never have to ask. Everything runs locally in your VS Code.
 
@@ -8,13 +8,13 @@
 
 ```
 # 1. Plan and build a feature from a Jira ticket (plan → approve → implement)
-@orchestrator plan NG-36060
+@orchestrator plan PROJ-1234
 
 # 2. Build anything — agent auto-detects frontend/backend/full-stack
 @orchestrator build user preferences CRUD with React UI
 
 # 3. Enrich plan with Confluence knowledge
-@docs-planner plan NG-36060 with Confluence context
+@docs-planner plan PROJ-1234 with Confluence context
 
 # 4. Write documentation to Confluence
 @docs-writer create Frontend Standards page in NG space
@@ -222,7 +222,7 @@ The agent logs the override in the response.
 ### Recipe 1: Build from Jira ticket (recommended)
 
 ```
-@orchestrator plan NG-36060
+@orchestrator plan PROJ-1234
 ```
 → Reviews plan → Approve → Implementation starts automatically
 
@@ -255,14 +255,14 @@ The agent logs the override in the response.
 ### Recipe 6: Direct Jira ticket parsing
 
 ```
-@jira-planner plan NG-36060
+@jira-planner plan PROJ-1234
 ```
 → Gets Gherkin ACs, structured TODOs, T-shirt estimates
 
 ### Recipe 7: Enrich plan with Confluence knowledge
 
 ```
-@docs-planner plan NG-36060 with Confluence context
+@docs-planner plan PROJ-1234 with Confluence context
 ```
 → Searches Confluence for standards, ADRs, system design → enriched plan with citations
 
@@ -325,7 +325,7 @@ Default thresholds (overridable per-project in `copilot-instructions.md`):
 
 ## Shared Instruction Files (Auto-Injected)
 
-The `.github/instructions/` folder contains standards that are **automatically loaded** by Copilot when editing matching files. Agents reference these instead of embedding content.
+The `` folder contains standards that are **automatically loaded** by Copilot when editing matching files. Agents reference these instead of embedding content.
 
 > **v1.2.0 — GUARDRAILS split for ~75% token reduction.** The monolith has been replaced with 3 focused files; `GUARDRAILS.instructions.md` is now a redirect index.
 
@@ -412,17 +412,17 @@ See [`copilot/README.md`](../copilot/README.md) for environment setup.
 | **Mar 25, 2026** | **v1.1.0** — Added Confluence integration: `@docs-writer` (doc CRUD), `@docs-planner` (Jira + Confluence bridge). Confluence MCP server in `copilot/mcp.json`. GUARDRAILS § 7i, § 7j, § 11b added. `confluence-content-guide` skill added. Agent count: 10 → 12. |
 | **Mar 18, 2026** | **v1.0.0** — Full orchestration rewrite. Mandatory quality chains (§ 12a–12m). Parallel execution. Agent Skills. Chain checkpointing. Configurable thresholds. Error taxonomy. All agents on Claude Sonnet 4.6, orchestrator on Sonnet 4.6. Worker agents hidden (`user-invocable: false`). |
 | Mar 1, 2026 | Added `copilot/mcp.json` — org-wide MCP server config (Jira) |
-| Feb 26, 2026 | Added `.github/instructions/GUARDRAILS.instructions.md` — cross-cutting guardrails (§ 1–§ 11) |
+| Feb 26, 2026 | Added `GUARDRAILS.instructions.md` — cross-cutting guardrails (§ 1–§ 11) |
 | Feb 26, 2026 | All agents updated to reference GUARDRAILS and standard response format |
 | Feb 26, 2026 | Domain-specific guardrails added: code-reviewer (5-dimension + risk ranking), migration (idempotent, reversible, up/down, validation), cypress-generator (no flaky selectors, POM, setup/teardown), jira-planner (Gherkin, subtasks, deps, estimates) | `GUARDRAILS.instructions.md`, 4 agent files |
 | Feb 9, 2026 | Cross-agent chain verification added to code-builder (backend + frontend + full-stack) | `code-builder.agent.md` |
 | Feb 9, 2026 | test-generator templates expanded: +dialog controller, +page, +dialog, +table, +list query, +delete mutation tests | `test-generator.agent.md` |
-| Feb 9, 2026 | Extracted `ef-migration-patterns.instructions.md` from migration (table, column, index, config, DbContext templates) | `migration.agent.md`, `.github/instructions/ef-migration-patterns.instructions.md` |
+| Feb 9, 2026 | Extracted `ef-migration-patterns.instructions.md` from migration (table, column, index, config, DbContext templates) | `migration.agent.md`, `ef-migration-patterns.instructions.md` |
 | Feb 9, 2026 | Namespace parameterized in backend + test-writer (`{ServiceName}` auto-detection) | `backend.agent.md`, `test-writer.agent.md` |
 | Feb 9, 2026 | Frontend-builder templates added (8 scaffolds: types, query, mutation, controller, dialog controller, page, dialog, table) | `frontend.agent.md` |
-| Feb 9, 2026 | Extracted `cypress-patterns.instructions.md` from cypress-generator (installation, POM, config templates) | `cypress-generator.agent.md`, `.github/instructions/cypress-patterns.instructions.md` |
+| Feb 9, 2026 | Extracted `cypress-patterns.instructions.md` from cypress-generator (installation, POM, config templates) | `cypress-generator.agent.md`, `cypress-patterns.instructions.md` |
 | Feb 2026 | Agent consolidation: 13 → 9 agents. Merged auth-builder, config-builder, migration-planner, new-service-scaffold into existing agents | All agents |
-| Feb 2026 | Created instruction files for token optimization (~50% reduction) | `.github/instructions/` created |
+| Feb 2026 | Created instruction files for token optimization (~50% reduction) | `` created |
 | Feb 2026 | Initial system: 9 agents + 7 instruction files | All files |
 
 ---

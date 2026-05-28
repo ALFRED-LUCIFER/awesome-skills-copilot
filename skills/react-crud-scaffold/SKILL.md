@@ -1,7 +1,7 @@
 ---
 name: react-crud-scaffold
 description: >
-  Complete CRUD code templates for Copilot Agent System React 19 + MUI 7 features.
+  Complete CRUD code templates for your project React 19 + MUI 7 features.
   Contains types, query hooks, mutation hooks, controller hooks, dialog controller,
   page component, dialog component, and standalone table component templates.
   Replace {Feature}/{feature} with your entity name (e.g. Machine/machine).
@@ -10,7 +10,7 @@ description: >
 # Frontend CRUD Templates
 
 > Replace `{Feature}` / `{feature}` with your entity name (PascalCase / camelCase).
-> All imports reference platform packages — see `.github/instructions/platform-mui.instructions.md` and `.github/instructions/platform-common.instructions.md` for full API docs.
+> All imports reference platform packages — see `platform-mui.instructions.md` and `platform-common.instructions.md` for full API docs.
 
 ---
 
@@ -81,7 +81,7 @@ export const use{Feature}Query = (id: number | undefined) =>
 ## hooks/use{Feature}Mutation.ts
 
 ```typescript
-import { useMutation, useNotifications } from '@myorg/ng-lib-react-platform-mui';
+import { useMutation, useNotifications } from '@your-org/platform-lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { UseFormReturn } from 'react-hook-form';
 import {
@@ -141,7 +141,7 @@ export const useDelete{Feature}Mutation = () => {
 ```typescript
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePlatformMrt, useMrtDataValueFormatter, MRT_ColumnDef } from '@myorg/ng-lib-react-platform-mui';
+import { usePlatformMrt, useMrtDataValueFormatter, MRT_ColumnDef } from '@your-org/platform-lib';
 import { useTranslation } from '@/i18n';
 import { use{Feature}sQuery } from './use{Feature}Query';
 import { useDelete{Feature}Mutation } from './use{Feature}Mutation';
@@ -302,8 +302,8 @@ export const use{Feature}DialogController = (
 
 ```tsx
 import { FC } from 'react';
-import { PageContainer, ActionBar, Button } from '@myorg/ng-lib-react-platform-mui';
-import { PlatformMrt } from '@myorg/ng-lib-react-platform-mui';
+import { PageContainer, ActionBar, Button } from '@your-org/platform-lib';
+import { PlatformMrt } from '@your-org/platform-lib';
 import { useTranslation } from '@/i18n';
 import { use{Feature}Controller } from '../domain/{feature}/hooks/use{Feature}Controller';
 import { {Feature}Dialog } from '../domain/{feature}/components/{Feature}Dialog';
@@ -353,7 +353,7 @@ export const {Feature}Page: FC = () => {
 ```tsx
 import { FC } from 'react';
 import { Grid2 as Grid } from '@mui/material';
-import { PlatformDialog, TextFieldElement } from '@myorg/ng-lib-react-platform-mui';
+import { PlatformDialog, TextFieldElement } from '@your-org/platform-lib';
 import { useTranslation } from '@/i18n';
 import { use{Feature}DialogController } from '../hooks/use{Feature}DialogController';
 import type { {Feature} } from '../types/{feature}.types';
@@ -425,9 +425,9 @@ import { FC, useMemo } from 'react';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { PlatformMrt, MRT_ColumnDef, useMrtDataValueFormatter } from '@myorg/ng-lib-react-platform-mui';
+import { PlatformMrt, MRT_ColumnDef, useMrtDataValueFormatter } from '@your-org/platform-lib';
 import { useTranslation } from '@/i18n';
-import { useDialogs } from '@myorg/ng-lib-react-platform-mui';
+import { useDialogs } from '@your-org/platform-lib';
 import type { {Feature} } from '../types/{feature}.types';
 import type { MRT_TableInstance } from 'material-react-table';
 

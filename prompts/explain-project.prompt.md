@@ -51,7 +51,7 @@ Identify and briefly describe the purpose of these folders if present:
 
 ## Step 5 — Read instruction context
 
-List all files present in `.github/instructions/` and note the `applyTo:` glob for each.
+List all files present in `` and note the `applyTo:` glob for each.
 
 ## Step 6 — Detect test framework
 

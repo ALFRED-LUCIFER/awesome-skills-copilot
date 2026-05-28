@@ -1,0 +1,66 @@
+# Awesome Skills Copilot — llms.txt
+# Machine-readable index of all agents, skills, hooks, and plugins
+# Compatible with GitHub Copilot, Claude Code, and other AI assistants
+
+## Agents
+
+- name: orchestrator | path: agents/orchestrator.agent.md | description: Single entry-point — delegates to planners and builders through mandatory quality chains
+- name: planner | path: agents/planner.agent.md | description: Read-only planning with Gherkin ACs, delegation chain, estimates, and risks
+- name: jira-planner | path: agents/jira-planner.agent.md | description: Jira read+write — Gherkin conversion, DoD checklists, sprint planning
+- name: docs-planner | path: agents/docs-planner.agent.md | description: Jira + Confluence bridge planner with knowledge enrichment
+- name: backend | path: agents/backend.agent.md | description: .NET CRUD code generator — Controller, Service, Repository, DTO, Mapping
+- name: frontend | path: agents/frontend.agent.md | description: React + TypeScript + MUI component builder with hook patterns
+- name: scaffold | path: agents/scaffold.agent.md | description: .NET microservice skeleton scaffolder
+- name: reviewer | path: agents/reviewer.agent.md | description: 7-dimension code review with multi-model panel and auto-fix loop
+- name: docs-writer | path: agents/docs-writer.agent.md | description: Confluence documentation writer with templates
+- name: product-manual | path: agents/product-manual.agent.md | description: HTML product documentation generator
+- name: backend-tests | path: agents/backend-tests.agent.md | description: NUnit + Moq test writer targeting 95% coverage
+- name: frontend-tests | path: agents/frontend-tests.agent.md | description: Vitest + React Testing Library test writer targeting 90% coverage
+- name: e2e-tests | path: agents/e2e-tests.agent.md | description: Cypress E2E test generator with strict POM
+- name: playwright-e2e | path: agents/playwright-e2e.agent.md | description: Playwright E2E — cross-browser coverage, accessibility audits
+- name: migration | path: agents/migration.agent.md | description: EF Core migration specialist — rollback-safe Up/Down
+
+## Skills
+
+- name: acquire-codebase-knowledge | path: skills/acquire-codebase-knowledge/SKILL.md | description: Structured codebase exploration for onboarding
+- name: code-review-pipeline | path: skills/code-review-pipeline/SKILL.md | description: Multi-model panel review system
+- name: confluence-content-guide | path: skills/confluence-content-guide/SKILL.md | description: Confluence documentation structure templates
+- name: conventional-commit | path: skills/conventional-commit/SKILL.md | description: Conventional Commits format enforcement
+- name: create-adr | path: skills/create-adr/SKILL.md | description: Architectural Decision Record creation
+- name: csharp-nunit | path: skills/csharp-nunit/SKILL.md | description: NUnit test templates for .NET services
+- name: diagnose | path: skills/diagnose/SKILL.md | description: AI workflow health check
+- name: doc-comments | path: skills/doc-comments/SKILL.md | description: XML doc / JSDoc comment generation
+- name: dotnet-crud-scaffold | path: skills/dotnet-crud-scaffold/SKILL.md | description: .NET CRUD code templates
+- name: dotnet-namespace-detect | path: skills/dotnet-namespace-detect/SKILL.md | description: .NET namespace auto-detection
+- name: dotnet-quality-chain | path: skills/dotnet-quality-chain/SKILL.md | description: Backend quality chain — build, test, review
+- name: explain-file | path: skills/explain-file/SKILL.md | description: Deep file analysis and dependency tracing
+- name: gherkin-format | path: skills/gherkin-format/SKILL.md | description: Gherkin format rules G1-G11
+- name: harness-creator | path: skills/harness-creator/SKILL.md | description: Project harness subsystem scaffolding
+- name: jira-gherkin-convert | path: skills/jira-gherkin-convert/SKILL.md | description: Convert Jira tickets to Gherkin ACs
+- name: jira-user-story-draft | path: skills/jira-user-story-draft/SKILL.md | description: Draft Jira user stories with Gherkin
+- name: knowledge-init | path: skills/knowledge-init/SKILL.md | description: Living knowledge base builder
+- name: lisec-doc-template | path: skills/lisec-doc-template/SKILL.md | description: HTML product documentation template
+- name: performance-optimize | path: skills/performance-optimize/SKILL.md | description: Performance analysis for .NET and React
+- name: playwright-test-gen | path: skills/playwright-test-gen/SKILL.md | description: Playwright test spec generation
+- name: product-doc-gap-checker | path: skills/product-doc-gap-checker/SKILL.md | description: Documentation completeness auditor
+- name: product-flow-screenshots | path: skills/product-flow-screenshots/SKILL.md | description: Automated screenshot flow generation
+- name: react-crud-scaffold | path: skills/react-crud-scaffold/SKILL.md | description: React CRUD code templates
+- name: react-quality-chain | path: skills/react-quality-chain/SKILL.md | description: Frontend quality chain — build, test, review
+- name: react-vitest | path: skills/react-vitest/SKILL.md | description: Vitest + React Testing Library templates
+- name: review-and-fix | path: skills/review-and-fix/SKILL.md | description: Fix-first code review
+- name: security-review | path: skills/security-review/SKILL.md | description: OWASP-aligned security audit
+- name: trace-bug | path: skills/trace-bug/SKILL.md | description: Structured root-cause analysis
+
+## Hooks
+
+- name: governance-audit | path: hooks/governance-audit/ | description: Session governance and audit logging
+- name: knowledge-drift | path: hooks/knowledge-drift/ | description: Detects stale documentation
+- name: secrets-scanner | path: hooks/secrets-scanner/ | description: Scans for leaked secrets in prompts
+- name: session-logger | path: hooks/session-logger/ | description: Logs session activity and metrics
+- name: tool-guardian | path: hooks/tool-guardian/ | description: Guards tool usage against policies
+
+## Plugins
+
+- name: fullstack-dotnet-react | path: plugins/fullstack-dotnet-react/ | description: Full-stack .NET + React development bundle
+- name: testing-suite | path: plugins/testing-suite/ | description: Complete testing toolkit — unit, integration, E2E
+- name: planning-suite | path: plugins/planning-suite/ | description: Planning, review, and documentation bundle

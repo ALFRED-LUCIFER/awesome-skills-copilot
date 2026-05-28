@@ -86,7 +86,7 @@ find . -name '*.instructions.md' | sort
 
 # Check for required guardrail files
 for f in GUARDRAILS-core GUARDRAILS-code GUARDRAILS-orchestration; do
-  if [ -f ".github/instructions/${f}.instructions.md" ]; then
+  if [ -f "${f}.instructions.md" ]; then
     echo "✅ ${f}"
   else
     echo "❌ ${f} MISSING"

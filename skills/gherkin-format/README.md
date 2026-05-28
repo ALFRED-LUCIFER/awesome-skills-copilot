@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Defines the canonical Gherkin format for all acceptance criteria in the Copilot Agent System project. Reference specification for agents and prompts that generate or validate Gherkin.
+Defines the canonical Gherkin format for all acceptance criteria in the your project project. Reference specification for agents and prompts that generate or validate Gherkin.
 
 ## When to Use
 

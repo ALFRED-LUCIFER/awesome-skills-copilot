@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Ensures all commit messages follow the Conventional Commits specification with Copilot Agent System extensions: mandatory scope, Jira ticket references in footers, and breaking change notation.
+Ensures all commit messages follow the Conventional Commits specification with your project extensions: mandatory scope, Jira ticket references in footers, and breaking change notation.
 
 ## When to Use
 

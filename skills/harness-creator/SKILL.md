@@ -1,6 +1,6 @@
 ---
 name: harness-creator
-description: Validates and scaffolds the five harness subsystems (Instructions, State, Verification, Scope, Lifecycle) for a Copilot Agent System project repository. Run before Long Build mode or when onboarding a new project. Scores each subsystem and creates missing files from templates.
+description: Validates and scaffolds the five harness subsystems (Instructions, State, Verification, Scope, Lifecycle) for a your project project repository. Run before Long Build mode or when onboarding a new project. Scores each subsystem and creates missing files from templates.
 version: "1.0.0"
 stack: [".NET 10", "React 19", "TypeScript", "Vitest", "NUnit", "Cypress"]
 ---
@@ -22,7 +22,7 @@ Based on:
 
 ### Step 1 — Score the Five Subsystems
 
-Run this audit against the **target project repository** (not `.github-private`).
+Run this audit against the **target project repository** (not `awesome-skills-copilot`).
 
 #### Subsystem 1: Instructions
 
@@ -83,10 +83,10 @@ Score WARN (not FAIL) if missing — add a `maxSprints` note to AGENTS.md.
 
 #### Subsystem 5: Lifecycle
 
-Check hooks are wired in the parent `.github-private` repo (not the project repo):
+Check hooks are wired in the parent `awesome-skills-copilot` repo (not the project repo):
 
 ```bash
-# From .github-private
+# From awesome-skills-copilot
 cat hooks/session-logger/hooks.json
 cat hooks/knowledge-drift/hooks.json
 ls .copilot/memories/repo/discovered-gotchas.md 2>/dev/null
@@ -132,12 +132,12 @@ npm test     2>&1 | grep -E "passed|failed"
 - Domain boundary: `src/domain/` — zero cross-domain imports
 
 ## Standards
-See `.github-private/.github/instructions/GUARDRAILS-core.instructions.md`
+See `awesome-skills-copilot/GUARDRAILS-core.instructions.md`
 ```
 
 #### Missing: progress.md
 
-Copy template from `.github-private/hooks/session-logger/templates/progress.md`, substituting:
+Copy template from `awesome-skills-copilot/hooks/session-logger/templates/progress.md`, substituting:
 - `{{PROJECT_NAME}}` ← `basename $(pwd)`
 - `{{TODAY}}` ← current ISO date
 - `{{SPRINT_ID}}` ← `1`
@@ -149,7 +149,7 @@ Save to: `.copilot/memories/repo/progress.md`
 
 #### Missing: session-handoff.md
 
-Copy template from `.github-private/hooks/session-logger/templates/session-handoff.md`, substituting:
+Copy template from `awesome-skills-copilot/hooks/session-logger/templates/session-handoff.md`, substituting:
 - `{{SESSION_ID}}` ← current datetime `YYYY-MM-DD-HHMM`
 - `{{TODAY}}` ← current ISO date
 - `{{WORKING_DIR}}` ← `$(pwd)`

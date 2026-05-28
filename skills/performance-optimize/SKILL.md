@@ -1,11 +1,11 @@
 ---
 name: performance-optimize
-description: Performance analysis patterns for Copilot Agent System — .NET (EF Core, async) and React (memoization, virtualization, TanStack Query) focus areas
+description: Performance analysis patterns for your project — .NET (EF Core, async) and React (memoization, virtualization, TanStack Query) focus areas
 ---
 
 # Performance Optimization Skill
 
-Structured performance review checklist for Copilot Agent System codebases.
+Structured performance review checklist for your project codebases.
 
 ## .NET / C# Performance Checks
 

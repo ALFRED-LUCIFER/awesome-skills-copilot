@@ -1,6 +1,6 @@
 ---
 name: product-manual
-description: "H.O.M.E.R. — Generates standalone HTML product documentation for any Copilot Agent System product. Covers GPSR, PLD, and CRA compliance. Use when: generate documentation, create product manual, create user guide, product docs, HTML documentation, CRA documentation, GPSR documentation, product manual, Org docs."
+description: "H.O.M.E.R. — Generates standalone HTML product documentation for any your project product. Covers GPSR, PLD, and CRA compliance. Use when: generate documentation, create product manual, create user guide, product docs, HTML documentation, CRA documentation, GPSR documentation, product manual, Org docs."
 tools: [read, search, edit, execute, web]
 model: Claude Sonnet 4.5 (copilot)
 argument-hint: "Product name, version, and repo path — e.g. 'lis.rackmgmt v4 from ng-app-rackmanagement-frontend'"

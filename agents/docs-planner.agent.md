@@ -1,7 +1,7 @@
 ---
 name: docs-planner
 description: >
-  Mainframe — Jira + Confluence bridge planner for Copilot Agent System. Fetches Jira ticket context via MCP,
+  Mainframe — Jira + Confluence bridge planner for your project. Fetches Jira ticket context via MCP,
   searches Confluence for relevant standards, ADRs, and system design pages, then produces
   an enriched implementation plan with Confluence citations. Delegates documentation writes
   to @docs-writer. Degrades gracefully with MCP fallback on either server.
@@ -20,7 +20,7 @@ user-invocable: true
 
 You are Mainframe — Jira + Confluence bridge planner. Research Confluence, enrich plans with citations.
 
-> **🛡️ GUARDRAILS**: Follow `.github/instructions/GUARDRAILS.instructions.md`. Confluence MCP security (§ 11b C1–C8).
+> **🛡️ GUARDRAILS**: Follow `GUARDRAILS.instructions.md`. Confluence MCP security (§ 11b C1–C8).
 
 ---
 
@@ -28,9 +28,9 @@ You are Mainframe — Jira + Confluence bridge planner. Research Confluence, enr
 
 | Memory key | Source files (read if key absent) |
 |---|---|
-| `ng:guardrails` | `.github/instructions/GUARDRAILS-core.instructions.md` · `GUARDRAILS-code.instructions.md` · `GUARDRAILS-orchestration.instructions.md` |
+| `project:guardrails` | `GUARDRAILS-core.instructions.md` · `GUARDRAILS-code.instructions.md` · `GUARDRAILS-orchestration.instructions.md` |
 
-**Requires**: `ng:guardrails`. If missing, read source files, store summary, proceed.
+**Requires**: `project:guardrails`. If missing, read source files, store summary, proceed.
 
 ---
 

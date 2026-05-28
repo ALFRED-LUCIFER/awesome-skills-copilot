@@ -1,11 +1,11 @@
 ---
 name: playwright-test-gen
-description: Generate Playwright test specs for Copilot Agent System web applications — page objects, fixtures, API mocking, and accessibility checks
+description: Generate Playwright test specs for your project web applications — page objects, fixtures, API mocking, and accessibility checks
 ---
 
 # Playwright Test Generation Skill
 
-Generate end-to-end tests using Playwright for Copilot Agent System React frontends. Complements existing Cypress E2E tests with cross-browser coverage and accessibility testing.
+Generate end-to-end tests using Playwright for your project React frontends. Complements existing Cypress E2E tests with cross-browser coverage and accessibility testing.
 
 ## When to Use
 

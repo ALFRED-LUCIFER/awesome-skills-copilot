@@ -5,7 +5,7 @@ description: AI-powered codebase security review â€” extracts GUARDRAILS SEC-1â€
 
 # Security Review Skill
 
-Structured security audit for Copilot Agent System codebases. Use this skill when performing a dedicated security review or when @reviewer flags security concerns.
+Structured security audit for your project codebases. Use this skill when performing a dedicated security review or when @reviewer flags security concerns.
 
 ## Scope
 

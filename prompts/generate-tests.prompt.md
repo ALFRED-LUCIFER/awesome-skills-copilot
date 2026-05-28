@@ -1,13 +1,13 @@
 ---
 name: generate-tests
-description: Generate unit tests using Copilot Agent System standards — routes to @backend-tests (.NET/C#) or @frontend-tests (React/TypeScript) automatically based on file type
+description: Generate unit tests using your project standards — routes to @backend-tests (.NET/C#) or @frontend-tests (React/TypeScript) automatically based on file type
 argument-hint: Leave blank to test the active file, or paste a file path to test a specific file
 agent: agent
 model: Claude Sonnet 4.6 (copilot)
 tools: [search/codebase, edit/editFiles, execute/getTerminalOutput, execute/runInTerminal, read/terminalLastCommand, read/terminalSelection, todo, vscode/memory, vscode/askQuestions]
 ---
 
-Generate unit tests for the following code using Copilot Agent System standards.
+Generate unit tests for the following code using your project standards.
 
 **Target**: `${input:filePath:Leave blank for active file, or enter file path e.g. src/Services/UserService.cs}`
 

@@ -5,7 +5,7 @@ description: Enforces Conventional Commits format for all git commit messages â€
 
 # Conventional Commit Skill
 
-All commit messages in Copilot Agent System repos MUST follow [Conventional Commits v1.0.0](https://www.conventionalcommits.org/).
+All commit messages in your project repos MUST follow [Conventional Commits v1.0.0](https://www.conventionalcommits.org/).
 
 ## Format
 

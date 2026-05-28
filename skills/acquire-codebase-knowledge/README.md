@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Provides a 4-step structured workflow for understanding any Copilot Agent System repository. Generates a knowledge map covering project structure, architecture patterns, coding conventions, and key files — ideal for onboarding or switching between services.
+Provides a 4-step structured workflow for understanding any your project repository. Generates a knowledge map covering project structure, architecture patterns, coding conventions, and key files — ideal for onboarding or switching between services.
 
 ## When to Use
 

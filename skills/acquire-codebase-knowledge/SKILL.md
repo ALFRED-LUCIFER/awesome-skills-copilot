@@ -5,7 +5,7 @@ description: Structured codebase exploration for onboarding — produces a knowl
 
 # Acquire Codebase Knowledge Skill
 
-Systematic exploration of a Copilot Agent System repository to build a comprehensive understanding. Use for onboarding, context gathering before planning, or when switching between services.
+Systematic exploration of a your project repository to build a comprehensive understanding. Use for onboarding, context gathering before planning, or when switching between services.
 
 ## Step 1 — Project Detection
 

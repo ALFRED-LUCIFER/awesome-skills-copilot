@@ -113,7 +113,7 @@ Feature: [NG-37346 AC1] — Update all @myorg platform packages to latest stable
 
   Scenario: Successfully update all @myorg platform packages
     Given package.json contains "@myorg/ng-lib-react-platform-common" at version "2.5.3"
-      And package.json contains "@myorg/ng-lib-react-platform-mui" at version "2.5.3"
+      And package.json contains "@your-org/platform-lib" at version "2.5.3"
       And package.json contains "@myorg/ng-lib-react-masterdata-api" at version "2.1.18"
       And package.json contains "@myorg/ng-lib-react-masterdata-mui" at version "2.1.18"
       And package.json contains "@myorg/ng-lib-react-shapes-mui" at version "2.1.5"
@@ -140,7 +140,7 @@ Feature: [NG-37346 AC1] — Update all @myorg platform packages to latest stable
       | @myorg/ng-lib-react-masterdata-api       | 2.1.18  | 2.1.25 |
       | @myorg/ng-lib-react-masterdata-mui       | 2.1.18  | 2.1.25 |
       | @myorg/ng-lib-react-platform-common      | 2.5.3   | 2.5.18 |
-      | @myorg/ng-lib-react-platform-mui         | 2.5.3   | 2.5.18 |
+      | @your-org/platform-lib         | 2.5.3   | 2.5.18 |
       | @myorg/ng-lib-react-shapes-mui           | 2.1.5   | 2.1.13 |
 
 Feature: [NG-37346 AC2] — Application builds successfully after upgrades

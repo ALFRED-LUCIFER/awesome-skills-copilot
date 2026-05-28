@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Provides comprehensive test templates for Copilot Agent System React frontend testing. Covers all testing layers with an 8-level priority order and strict forbidden patterns.
+Provides comprehensive test templates for your project React frontend testing. Covers all testing layers with an 8-level priority order and strict forbidden patterns.
 
 ## When to Use
 

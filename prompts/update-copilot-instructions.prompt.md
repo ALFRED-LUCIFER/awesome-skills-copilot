@@ -1,6 +1,6 @@
 ---
 name: update-copilot-instructions
-description: Maintain .github/instructions/ files — scan for duplications vs agents, or update a specific section
+description: Maintain  files — scan for duplications vs agents, or update a specific section
 argument-hint: "--scan  OR  [filename] [section]  e.g. GUARDRAILS-code.instructions.md §10"
 agent: agent
 model: Claude Sonnet 4.6 (copilot)
@@ -17,7 +17,7 @@ Run this mode when `${input:mode}` is `--scan` or empty.
 
 ### A1 — Inventory all instruction files
 
-Read every file in `.github/instructions/`:
+Read every file in ``:
 - `GUARDRAILS-core.instructions.md`
 - `GUARDRAILS-code.instructions.md`
 - `GUARDRAILS-orchestration.instructions.md`

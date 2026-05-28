@@ -1,0 +1,20 @@
+{
+  "name": "testing-suite",
+  "description": "Complete testing toolkit — NUnit backend tests, Vitest frontend tests, Cypress E2E, and Playwright cross-browser E2E with strict POM architecture",
+  "version": "1.0.0",
+  "keywords": ["testing", "nunit", "vitest", "cypress", "playwright", "e2e", "pom"],
+  "author": { "name": "Awesome Skills Copilot Community" },
+  "license": "MIT",
+  "agents": [
+    "../../agents/backend-tests.agent.md",
+    "../../agents/frontend-tests.agent.md",
+    "../../agents/e2e-tests.agent.md",
+    "../../agents/playwright-e2e.agent.md"
+  ],
+  "skills": [
+    "../../skills/csharp-nunit/",
+    "../../skills/react-vitest/",
+    "../../skills/playwright-test-gen/",
+    "../../skills/product-flow-screenshots/"
+  ]
+}
