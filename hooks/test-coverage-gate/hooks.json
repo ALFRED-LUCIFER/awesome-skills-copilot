@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "prePush": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/test-coverage-gate/check-coverage.sh",
+        "cwd": ".",
+        "env": {
+          "MIN_COVERAGE": "80",
+          "FAIL_MODE": "warn"
+        },
+        "timeoutSec": 120
+      }
+    ]
+  }
+}

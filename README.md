@@ -1,13 +1,13 @@
 # 🤖 Awesome Skills Copilot
 
-[![Agents](https://img.shields.io/badge/agents-25-blue)](agents/)
-[![Skills](https://img.shields.io/badge/skills-35-green)](skills/)
-[![Hooks](https://img.shields.io/badge/hooks-7-orange)](hooks/)
+[![Agents](https://img.shields.io/badge/agents-40-blue)](agents/)
+[![Skills](https://img.shields.io/badge/skills-55-green)](skills/)
+[![Hooks](https://img.shields.io/badge/hooks-10-orange)](hooks/)
 [![Plugins](https://img.shields.io/badge/plugins-4-purple)](plugins/)
-[![Prompts](https://img.shields.io/badge/prompts-15-yellow)](prompts/)
+[![Prompts](https://img.shields.io/badge/prompts-23-yellow)](prompts/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
 
-A production-ready collection of **25 AI agents**, **35 skills**, **7 hooks**, **4 plugins**, and **15 prompt templates** for GitHub Copilot and Claude Code.
+A production-ready collection of **40 AI agents**, **55 skills**, **10 hooks**, **4 plugins**, and **23 prompt templates** for GitHub Copilot and Claude Code.
 
 > **Works with**: GitHub Copilot (VS Code) · Claude Code · Any AI assistant that reads `.agent.md` / `SKILL.md` files
 
@@ -156,6 +156,31 @@ ln -s $(pwd)/skills .github/skills
 | `@e2e-tests` | Cypress E2E with strict Page Object Model | Sonnet 4.5 |
 | `@playwright-e2e` | Playwright E2E — cross-browser, accessibility | Sonnet 4.5 |
 | `@migration` | EF Core migration specialist (rollback-safe) | Sonnet 4.5 |
+| `@k8s-deployer` | Kubernetes manifest generator and deployer | Sonnet 4.6 |
+| `@k8s-troubleshoot` | Kubernetes cluster diagnostician | Sonnet 4.6 |
+| `@helm-engineer` | Helm 4 chart specialist | Sonnet 4.6 |
+| `@azure-deployer` | Azure infrastructure provisioning (AKS, ACR, Bicep) | Sonnet 4.6 |
+| `@foundry-agent` | Microsoft Foundry Agent Service specialist | Sonnet 4.6 |
+| `@pipeline-engineer` | CI/CD pipeline generator (GHA, Azure DevOps, GitLab) | Sonnet 4.6 |
+| `@tdd-red` | TDD Red phase — writes failing tests first | Sonnet 4.6 |
+| `@tdd-green` | TDD Green phase — minimal code to pass tests | Sonnet 4.6 |
+| `@tdd-refactor` | TDD Refactor phase — clean up while green | Sonnet 4.6 |
+| `@accessibility` | WCAG 2.2 AA auditor, fixer, and test generator | Sonnet 4.6 |
+| `@api-designer` | OpenAPI/GraphQL/gRPC spec design and validation | Sonnet 4.6 |
+| `@db-architect` | Schema design, migration gen, query optimization | Sonnet 4.6 |
+| `@refactor` | Systematic behavior-preserving refactoring | Sonnet 4.6 |
+| `@debug` | Structured debugging — root cause isolation | Sonnet 4.6 |
+| `@dependency-manager` | Dependency audit, update, vulnerability scan | Sonnet 4.6 |
+| `@perf-profiler` | Performance bottleneck identification | Sonnet 4.6 |
+| `@docs-generator` | README, API docs, changelog from code | Sonnet 4.6 |
+| `@git-workflow` | Branch strategy, merge conflicts, rebase | Sonnet 4.6 |
+| `@api-tester` | API test suites — Postman, contract, load tests | Sonnet 4.6 |
+| `@incident-responder` | Production incident triage, RCA, postmortems | Sonnet 4.6 |
+| `@release-manager` | Semantic versioning, changelog, releases | Sonnet 4.6 |
+| `@tech-debt-tracker` | Tech debt identification and prioritization | Sonnet 4.6 |
+| `@onboarding` | New developer onboarding — codebase tour | Sonnet 4.6 |
+| `@code-migrator` | Framework/version migration planning | Sonnet 4.6 |
+| `@monitoring-setup` | Health checks, dashboards, alerting, SLOs | Sonnet 4.6 |
 
 ### Mandatory Quality Chains
 
@@ -173,32 +198,59 @@ Frontend: @frontend → @frontend-tests + @e2e-tests (parallel) → @reviewer
 | Skill | Description |
 |-------|-------------|
 | `acquire-codebase-knowledge` | Structured codebase exploration for onboarding |
+| `api-versioning` | API versioning strategies and implementation patterns |
+| `authentication-patterns` | OAuth2, JWT, OIDC, API key implementation templates |
+| `azure-infrastructure` | Bicep + Terraform IaC templates for Azure |
+| `caching-patterns` | Redis, in-memory, CDN caching with invalidation |
+| `changelog-generator` | Auto-generate CHANGELOG from conventional commits |
+| `code-complexity` | Cyclomatic complexity analysis and hotspot detection |
 | `code-review-pipeline` | Multi-model panel review system |
 | `confluence-content-guide` | Confluence documentation templates |
+| `contract-testing` | Consumer-driven contract tests (Pact) |
 | `conventional-commit` | Conventional Commits enforcement |
 | `create-adr` | Architectural Decision Record creation |
 | `csharp-nunit` | NUnit test templates for .NET services |
+| `database-seeding` | Test data generation, seed scripts, faker patterns |
 | `diagnose` | AI workflow health check |
 | `doc-comments` | XML doc / JSDoc comment generation |
+| `docker-compose` | Multi-service Docker Compose generation |
 | `dotnet-crud-scaffold` | .NET CRUD code templates |
 | `dotnet-namespace-detect` | .NET namespace auto-detection |
 | `dotnet-quality-chain` | Backend quality chain (build → test → review) |
+| `env-config` | Environment configuration management and .env templates |
+| `error-handling-patterns` | Standardized error handling per language (RFC 9457) |
 | `explain-file` | Deep file analysis and dependency tracing |
+| `feature-flags` | Feature flag implementation patterns |
 | `gherkin-format` | Gherkin format rules G1–G11 |
+| `git-hooks-setup` | Husky, lint-staged, commitlint configuration |
+| `graphql-scaffold` | Schema-first GraphQL development templates |
 | `harness-creator` | Project harness subsystem scaffolding |
+| `helm-charts` | Helm 4 chart scaffolding templates |
+| `i18n-setup` | Internationalization scaffolding |
 | `jira-gherkin-convert` | Convert Jira tickets to Gherkin ACs |
 | `jira-user-story-draft` | Draft Jira user stories with Gherkin |
 | `knowledge-init` | Living knowledge base builder |
+| `kubernetes-manifests` | Production-ready K8s manifest templates |
 | `lisec-doc-template` | HTML product documentation template |
+| `load-testing` | k6/Artillery load test script generation |
+| `logging-observability` | Structured logging, tracing, and metrics setup |
+| `markitdown-convert` | Convert files to Markdown for LLM consumption |
+| `migration-guide` | Framework/version migration planning |
+| `monorepo-setup` | Nx, Turborepo, pnpm workspaces setup |
+| `openapi-scaffold` | Server stubs + client SDKs from OpenAPI specs |
 | `performance-optimize` | Performance analysis for .NET and React |
 | `playwright-test-gen` | Playwright test spec generation |
 | `product-doc-gap-checker` | Documentation completeness auditor |
 | `product-flow-screenshots` | Automated screenshot flow generation |
+| `rate-limiting` | Rate limiting, throttling, circuit breaker patterns |
 | `react-crud-scaffold` | React CRUD code templates |
 | `react-quality-chain` | Frontend quality chain (build → test → review) |
 | `react-vitest` | Vitest + RTL test templates |
 | `review-and-fix` | Fix-first code review |
 | `security-review` | OWASP-aligned security audit |
+| `skill-pipeline` | Declarative skill composition DAGs |
+| `skill-telemetry` | Skill invocation metrics and optimization |
+| `token-budget-loader` | Token-aware skill loading with tiered detail levels |
 | `trace-bug` | Structured root-cause analysis |
 
 ---
@@ -207,10 +259,15 @@ Frontend: @frontend → @frontend-tests + @e2e-tests (parallel) → @reviewer
 
 | Hook | Description |
 |------|-------------|
+| `changelog-auto` | Post-commit — auto-appends to CHANGELOG.md |
+| `complexity-guard` | Pre-commit — blocks high-complexity code |
+| `dependency-license-checker` | Scans for copyleft/blocked licenses |
 | `governance-audit` | Session governance and audit logging |
 | `knowledge-drift` | Detects stale documentation after code changes |
+| `memory-snapshot` | Session-end context capture for continuity |
 | `secrets-scanner` | Scans prompts and outputs for leaked secrets |
 | `session-logger` | Logs session activity and metrics |
+| `test-coverage-gate` | Pre-push — enforces minimum test coverage |
 | `tool-guardian` | Guards tool usage against defined policies |
 
 ---
@@ -244,13 +301,19 @@ Auto-injected coding standards based on file patterns:
 
 | Prompt | Description |
 |--------|-------------|
+| `/compare-approaches` | Compare technical approaches with tradeoffs matrix |
+| `/create-env-template` | Scan codebase and generate .env.example |
+| `/debug-error` | Structured root cause analysis from error/trace |
 | `/describe-pr` | Generate a PR description from staged changes |
+| `/estimate-effort` | T-shirt estimate a feature with breakdown |
 | `/explain-project` | Explain the current project structure |
 | `/find-confluence-page` | Search Confluence for relevant pages |
 | `/generate-code` | Generate code from requirements |
 | `/generate-tests` | Generate tests for existing code |
+| `/incident-postmortem` | Generate blameless incident postmortem |
 | `/jarvis` | Quick orchestrator invocation |
 | `/knowledge-init` | Initialize living knowledge base |
+| `/optimize-query` | Optimize slow SQL or ORM queries |
 | `/plan` | Plan a feature implementation |
 | `/product-flow-screenshots` | Generate screenshot flow |
 | `/read-jira-ticket` | Fetch and analyze a Jira ticket |
@@ -259,6 +322,8 @@ Auto-injected coding standards based on file patterns:
 | `/sprint-status` | Get sprint status from Jira |
 | `/update-copilot-instructions` | Update copilot-instructions.md |
 | `/update-product-manual` | Update product documentation |
+| `/write-changelog` | Generate CHANGELOG from conventional commits |
+| `/write-readme` | Generate README.md from project analysis |
 
 ---
 

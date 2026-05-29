@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "postCommit": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/changelog-auto/update-changelog.sh",
+        "cwd": ".",
+        "env": {
+          "CHANGELOG_FILE": "CHANGELOG.md"
+        },
+        "timeoutSec": 15
+      }
+    ]
+  }
+}

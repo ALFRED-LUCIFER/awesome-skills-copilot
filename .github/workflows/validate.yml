@@ -1,0 +1,118 @@
+name: Validate Navigation Index
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate-counts:
+    name: Check README & AGENTS.md sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Count assets on disk
+        id: disk
+        run: |
+          agents=$(find agents -name '*.agent.md' | wc -l | tr -d ' ')
+          skills=$(find skills -mindepth 2 -name 'SKILL.md' | wc -l | tr -d ' ')
+          hooks=$(find hooks -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
+          prompts=$(find prompts -name '*.prompt.md' | wc -l | tr -d ' ')
+          plugins=$(find plugins -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
+          echo "agents=$agents" >> "$GITHUB_OUTPUT"
+          echo "skills=$skills" >> "$GITHUB_OUTPUT"
+          echo "hooks=$hooks" >> "$GITHUB_OUTPUT"
+          echo "prompts=$prompts" >> "$GITHUB_OUTPUT"
+          echo "plugins=$plugins" >> "$GITHUB_OUTPUT"
+          echo "📊 Disk: $agents agents, $skills skills, $hooks hooks, $plugins plugins, $prompts prompts"
+
+      - name: Check README.md badges
+        run: |
+          readme_agents=$(grep -oP '\d+(?=\+? agents)' README.md | head -1 || echo "0")
+          readme_skills=$(grep -oP '\d+(?=\+? skills)' README.md | head -1 || echo "0")
+          readme_hooks=$(grep -oP '\d+(?=\+? hooks)' README.md | head -1 || echo "0")
+          readme_prompts=$(grep -oP '\d+(?=\+? prompts)' README.md | head -1 || echo "0")
+
+          errors=0
+
+          if [ "$readme_agents" != "${{ steps.disk.outputs.agents }}" ]; then
+            echo "::error file=README.md::Agent count mismatch: README says $readme_agents, disk has ${{ steps.disk.outputs.agents }}"
+            errors=$((errors + 1))
+          fi
+          if [ "$readme_skills" != "${{ steps.disk.outputs.skills }}" ]; then
+            echo "::error file=README.md::Skill count mismatch: README says $readme_skills, disk has ${{ steps.disk.outputs.skills }}"
+            errors=$((errors + 1))
+          fi
+          if [ "$readme_hooks" != "${{ steps.disk.outputs.hooks }}" ]; then
+            echo "::error file=README.md::Hook count mismatch: README says $readme_hooks, disk has ${{ steps.disk.outputs.hooks }}"
+            errors=$((errors + 1))
+          fi
+          if [ "$readme_prompts" != "${{ steps.disk.outputs.prompts }}" ]; then
+            echo "::error file=README.md::Prompt count mismatch: README says $readme_prompts, disk has ${{ steps.disk.outputs.prompts }}"
+            errors=$((errors + 1))
+          fi
+
+          if [ "$errors" -gt 0 ]; then
+            echo "❌ $errors count mismatches found in README.md"
+            exit 1
+          fi
+          echo "✅ README.md counts match disk"
+
+      - name: Check AGENTS.md tables
+        run: |
+          # Count table rows in AGENTS.md (lines starting with | that aren't headers/separators)
+          agentsmd_agents=$(grep -c '| `@' AGENTS.md || echo "0")
+          agentsmd_skills=$(grep -c '| `.*` |.*skills/' AGENTS.md || echo "0")
+          agentsmd_hooks=$(grep -c '| `.*` |.*hooks/' AGENTS.md || echo "0")
+
+          errors=0
+
+          if [ "$agentsmd_agents" != "${{ steps.disk.outputs.agents }}" ]; then
+            echo "::error file=AGENTS.md::Agent table has $agentsmd_agents rows, disk has ${{ steps.disk.outputs.agents }} agents"
+            errors=$((errors + 1))
+          fi
+          if [ "$agentsmd_skills" != "${{ steps.disk.outputs.skills }}" ]; then
+            echo "::error file=AGENTS.md::Skill table has $agentsmd_skills rows, disk has ${{ steps.disk.outputs.skills }} skills"
+            errors=$((errors + 1))
+          fi
+          if [ "$agentsmd_hooks" != "${{ steps.disk.outputs.hooks }}" ]; then
+            echo "::error file=AGENTS.md::Hook table has $agentsmd_hooks rows, disk has ${{ steps.disk.outputs.hooks }} hooks"
+            errors=$((errors + 1))
+          fi
+
+          if [ "$errors" -gt 0 ]; then
+            echo "❌ $errors table mismatches found in AGENTS.md"
+            exit 1
+          fi
+          echo "✅ AGENTS.md tables match disk"
+
+      - name: Run npm validate
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run validate
+
+      - name: Check for orphaned agents (in dir but not in AGENTS.md)
+        run: |
+          errors=0
+          for f in agents/*.agent.md; do
+            name=$(basename "$f" .agent.md)
+            if ! grep -q "$name" AGENTS.md; then
+              echo "::error file=$f::Agent '$name' exists on disk but is missing from AGENTS.md"
+              errors=$((errors + 1))
+            fi
+          done
+          for f in skills/*/SKILL.md; do
+            name=$(echo "$f" | cut -d/ -f2)
+            if ! grep -q "$name" AGENTS.md; then
+              echo "::error file=$f::Skill '$name' exists on disk but is missing from AGENTS.md"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ "$errors" -gt 0 ]; then
+            echo "❌ $errors orphaned entries found"
+            exit 1
+          fi
+          echo "✅ No orphaned agents or skills"

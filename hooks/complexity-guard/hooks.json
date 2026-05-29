@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "preCommit": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/complexity-guard/check-complexity.sh",
+        "cwd": ".",
+        "env": {
+          "MAX_CYCLOMATIC": "15",
+          "MAX_COGNITIVE": "20",
+          "FAIL_MODE": "warn"
+        },
+        "timeoutSec": 30
+      }
+    ]
+  }
+}
