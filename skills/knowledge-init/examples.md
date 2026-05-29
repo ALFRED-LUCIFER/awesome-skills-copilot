@@ -93,6 +93,39 @@ EXCLUDE="node_modules|dist|build|obj|bin|.git|Migrations|wwwroot|coverage|test|s
 | `{path}` | {description} |
 ```
 
+## Template: Root `AGENTS.md` (project top-level — mandatory)
+
+```markdown
+# AGENTS.md — AI Navigation Index
+
+> Machine-readable navigation for AI agents exploring this repository.
+> Compatible with GitHub Copilot, Claude Code, and Codex.
+
+## Repository Purpose
+
+{1-3 sentence description of what this project does}
+
+## Directory Map
+
+{tree output of top-level folders with brief annotations}
+
+## Domain Index
+
+| Domain | Folder | AGENTS.md | Knowledge Docs |
+|--------|--------|-----------|----------------|
+| {Domain} | `{path}/` | [Index]({path}/AGENTS.md) | [docs/{domain}/](docs/{domain}/) |
+
+## Key Files
+
+- **Start here**: `README.md` → project overview
+- **Architecture**: `docs/INDEX.md` → full domain knowledge index
+- **Configuration**: {relevant config files}
+```
+
+> **This file is the single source of truth for AI navigation.** All other AI config files
+> (`CLAUDE.md`, `copilot-instructions.md`, etc.) should reference this file rather than
+> duplicating its content.
+
 ## Template: `{folder}/AGENTS.md`
 
 ```markdown
@@ -160,3 +193,20 @@ Project metadata (all optional — press Enter to skip each):
 4. Jira project key(s): ___
 5. Jira Epic link(s): ___
 ```
+
+## AI Config File Alignment
+
+When the skill detects any of these files in the target project, it must ensure they point to the root `AGENTS.md` as the single source of truth:
+
+| File | Action |
+|------|--------|
+| `CLAUDE.md` | Add/update: `See [AGENTS.md](AGENTS.md) for repository navigation and architecture.` |
+| `copilot-instructions.md` | Add/update: `See [AGENTS.md](AGENTS.md) for repository navigation and architecture.` |
+| `.github/copilot-instructions.md` | Add/update: `See [AGENTS.md](AGENTS.md) for repository navigation and architecture.` |
+| `.copilot-instructions.md` | Add/update: `See [AGENTS.md](AGENTS.md) for repository navigation and architecture.` |
+
+**Rules:**
+- Do NOT duplicate directory maps, domain listings, or agent indexes in these files
+- If the file already contains a navigation section or directory map, replace it with the single `AGENTS.md` pointer
+- Preserve all other content in these files (coding standards, tool config, etc.) — only the navigation/architecture section changes
+- If the file doesn't exist, do NOT create it — only update existing ones

@@ -1,5 +1,5 @@
 ---
-name: myorg-doc-template
+name: lisec-doc-template
 description: "Complete HTML template, compliance rules, and per-section content guide for Org product documentation. Contains standalone HTML skeleton with Org branding, i18n, WCAG 2.2 AA accessibility, sections A–I, search, print CSS, and EU regulation compliance (GPSR/PLD/CRA). Used exclusively by the @product-manual agent. Use when: generating product documentation HTML, doc template, documentation skeleton, compliance checklist."
 ---
 

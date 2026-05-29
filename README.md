@@ -7,7 +7,7 @@
 [![Prompts](https://img.shields.io/badge/prompts-23-yellow)](prompts/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
 
-A production-ready collection of **40 AI agents**, **55 skills**, **10 hooks**, **4 plugins**, and **23 prompt templates** for GitHub Copilot and Claude Code.
+A production-ready collection of **40 agents**, **55 skills**, **10 hooks**, **4 plugins**, and **23 prompts** for GitHub Copilot and Claude Code.
 
 > **Works with**: GitHub Copilot (VS Code) · Claude Code · Any AI assistant that reads `.agent.md` / `SKILL.md` files
 
@@ -374,7 +374,7 @@ ln -s $(pwd)/awesome-skills-copilot/skills ~/.vscode/extensions/awesome-skills-c
 ### Load in Claude Code
 1. Add `agents/` and `skills/` to your project's Workspace context
 2. Reference agents by name: `@orchestrator`, `@planner`, etc.
-3. All 28 skills auto-load on-demand
+3. All 55 skills auto-load on-demand
 
 ---
 
@@ -408,7 +408,7 @@ ln -s $(pwd)/awesome-skills-copilot/skills ~/.vscode/extensions/awesome-skills-c
 |-------|----------|
 | **Architecture** | [agents-guide.md](agents-guide.md) — Full system design with Mermaid diagrams |
 | **Research** | [Anthropic Harness Design](https://www.anthropic.com/engineering/harness-design-long-running-apps) — The science behind this repo |
-| **Agents** | [AGENTS.md](AGENTS.md) — Navigation index for all 15 agents |
+| **Agents** | [AGENTS.md](AGENTS.md) — Navigation index for all 40 agents |
 | **Skills** | Each skill folder contains detailed SKILL.md + examples |
 | **Plugins** | [plugins/](plugins/) — Pre-built bundles (fullstack, testing, planning) |
 | **Instructions** | [instructions/](instructions/) — Coding standards for .NET, React, testing, security |
