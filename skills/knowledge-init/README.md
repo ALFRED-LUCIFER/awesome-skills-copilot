@@ -4,9 +4,11 @@ Builds and maintains a **living knowledge base** for any application repository 
 
 ## What it produces
 
+- **Root `AGENTS.md`** — **mandatory**, always created at the project root regardless of stack. This is the **single source of truth** for AI navigation across GitHub Copilot, Claude Code, and Codex.
+
 For every domain/feature folder in the target repo:
 
-- **`{folder}/AGENTS.md`** — navigation index (entities, entry points, key files, links to docs). VS Code Copilot reads this automatically when you open a file in that folder. **No deep knowledge here — navigation only.**
+- **`{folder}/AGENTS.md`** — per-domain navigation index (entities, entry points, key files, links to docs). VS Code Copilot reads this automatically when you open a file in that folder. **No deep knowledge here — navigation only.**
 - **`docs/{domain}/`** — a folder containing:
   - **`_overview.md`** — bounded context, key entities, business rules, external contracts, known gotchas
   - **`{feature-name}.md`** — one file per distinct feature/flow (only created if ≥ 2 distinct features exist)
@@ -45,6 +47,16 @@ Sections marked `<!-- manual -->` in any generated doc are **never overwritten**
 
 The `knowledge-drift` hook runs at `sessionEnd` and detects which source files changed during the session. It maps changed files to their domain folder and writes a `STALE:` entry to `.copilot/memories/repo/knowledge-drift.md`. The next `/knowledge-init --update` reads this log to know what to refresh.
 
+## AI Config File Alignment
+
+If `CLAUDE.md`, `copilot-instructions.md`, `.github/copilot-instructions.md`, or `.copilot-instructions.md` exist in the target project, this skill updates them to **point to the root `AGENTS.md`** as the single source of truth. Duplicated directory maps or domain listings are replaced with a single pointer:
+
+```
+See [AGENTS.md](AGENTS.md) for repository navigation and architecture.
+```
+
+Existing coding standards, tool config, and non-navigation content are preserved.
+
 ## Scope: knowledge only
 
 This skill captures **what the code does** — domain knowledge, entity relationships, business rules, flows. It does **not** duplicate:
@@ -54,6 +66,33 @@ This skill captures **what the code does** — domain knowledge, entity relation
 - Deployment / CI docs → repo-specific docs
 
 ## AGENTS.md format
+
+### Root `AGENTS.md` (project top-level — mandatory)
+
+```markdown
+# AGENTS.md — AI Navigation Index
+
+> Machine-readable navigation for AI agents exploring this repository.
+> Compatible with GitHub Copilot, Claude Code, and Codex.
+
+## Repository Purpose
+{1-3 sentence description}
+
+## Directory Map
+{tree output with annotations}
+
+## Domain Index
+| Domain | Folder | AGENTS.md | Knowledge Docs |
+|--------|--------|-----------|----------------|
+
+## Key Files
+- **Start here**: `README.md`
+- **Architecture**: `docs/INDEX.md`
+```
+
+> **This is the single source of truth.** All other AI config files should reference this file.
+
+### Per-domain `{folder}/AGENTS.md`
 
 ```markdown
 # {Domain} — Agent Index

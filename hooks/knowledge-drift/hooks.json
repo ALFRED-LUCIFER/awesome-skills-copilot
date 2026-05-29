@@ -4,7 +4,7 @@
     "sessionEnd": [
       {
         "type": "command",
-        "bash": ".github/hooks/knowledge-drift/detect-drift.sh",
+        "bash": "hooks/knowledge-drift/detect-drift.sh",
         "cwd": ".",
         "timeoutSec": 10
       }
