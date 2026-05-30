@@ -12,8 +12,10 @@ model: 'Claude Sonnet 4.6 (copilot)'
 user-invocable: true
 agents: ['reviewer']
 handoffs:
-  - target: reviewer
-    trigger: 'Refactoring complete, all tests still passing'
+  - label: "🔍 Send to Vision for final review"
+    agent: reviewer
+    prompt: "Review the refactored implementation above — verify behavior preservation, no regressions, improved readability, and all tests still green."
+    send: true
 ---
 
 # TDD Refactor Agent

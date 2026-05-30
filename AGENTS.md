@@ -42,6 +42,7 @@ A production-ready collection of **40 specialized AI agents**, **55 skills**, **
 | `@frontend-tests` | `agents/frontend-tests.agent.md` | Vitest + RTL test writer (≥90% coverage) |
 | `@e2e-tests` | `agents/e2e-tests.agent.md` | Cypress E2E with strict POM |
 | `@playwright-e2e` | `agents/playwright-e2e.agent.md` | Playwright E2E — cross-browser, a11y |
+| `@playwright-tdd` | `agents/playwright-tdd.agent.md` | Playwright TDD loop — RED→GREEN→REFACTOR→VERIFY with POM |
 | `@migration` | `agents/migration.agent.md` | EF Core migration specialist |
 | `@k8s-deployer` | `agents/k8s-deployer.agent.md` | Kubernetes manifest generator and deployer |
 | `@k8s-troubleshoot` | `agents/k8s-troubleshoot.agent.md` | Kubernetes cluster diagnostician |
@@ -116,6 +117,7 @@ A production-ready collection of **40 specialized AI agents**, **55 skills**, **
 | `openapi-scaffold` | `skills/openapi-scaffold/` | Server stubs + client SDKs from OpenAPI specs |
 | `performance-optimize` | `skills/performance-optimize/` | Performance analysis patterns |
 | `playwright-test-gen` | `skills/playwright-test-gen/` | Playwright test spec generation |
+| `playwright-output` | `skills/playwright-output/` | Parse Playwright JSON/JUnit/HTML reports into typed result contracts |
 | `product-doc-gap-checker` | `skills/product-doc-gap-checker/` | Documentation completeness auditor |
 | `product-flow-screenshots` | `skills/product-flow-screenshots/` | Automated screenshot flow generation |
 | `rate-limiting` | `skills/rate-limiting/` | Rate limiting, throttling, circuit breaker patterns |

@@ -10,8 +10,10 @@ tools:
 model: 'Claude Sonnet 4.6 (copilot)'
 user-invocable: true
 handoffs:
-  - target: tdd-green
-    trigger: 'All tests written and verified failing'
+  - label: "🟢 Hand off to Green (make tests pass)"
+    agent: tdd-green
+    prompt: "All tests are written and verified failing. Implement the minimum code to make every failing test pass. Do NOT refactor — that is the next phase."
+    send: true
 ---
 
 # TDD Red Agent
