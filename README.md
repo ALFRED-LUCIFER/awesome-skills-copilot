@@ -1,13 +1,13 @@
 # 🤖 Awesome Skills Copilot
 
-[![Agents](https://img.shields.io/badge/agents-40-blue)](agents/)
-[![Skills](https://img.shields.io/badge/skills-55-green)](skills/)
+[![Agents](https://img.shields.io/badge/agents-41-blue)](agents/)
+[![Skills](https://img.shields.io/badge/skills-56-green)](skills/)
 [![Hooks](https://img.shields.io/badge/hooks-10-orange)](hooks/)
 [![Plugins](https://img.shields.io/badge/plugins-4-purple)](plugins/)
 [![Prompts](https://img.shields.io/badge/prompts-23-yellow)](prompts/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
 
-A production-ready collection of **40 agents**, **55 skills**, **10 hooks**, **4 plugins**, and **23 prompts** for GitHub Copilot and Claude Code.
+A production-ready collection of **41 agents**, **56 skills**, **10 hooks**, **4 plugins**, and **23 prompts** for GitHub Copilot and Claude Code.
 
 > **Works with**: GitHub Copilot (VS Code) · Claude Code · Any AI assistant that reads `.agent.md` / `SKILL.md` files
 
