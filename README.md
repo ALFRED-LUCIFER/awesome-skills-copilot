@@ -1,13 +1,13 @@
 # 🤖 Awesome Skills Copilot
 
-[![Agents](https://img.shields.io/badge/agents-40-blue)](agents/)
-[![Skills](https://img.shields.io/badge/skills-55-green)](skills/)
+[![Agents](https://img.shields.io/badge/agents-41-blue)](agents/)
+[![Skills](https://img.shields.io/badge/skills-56-green)](skills/)
 [![Hooks](https://img.shields.io/badge/hooks-10-orange)](hooks/)
 [![Plugins](https://img.shields.io/badge/plugins-4-purple)](plugins/)
 [![Prompts](https://img.shields.io/badge/prompts-23-yellow)](prompts/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
 
-A production-ready collection of **40 agents**, **55 skills**, **10 hooks**, **4 plugins**, and **23 prompts** for GitHub Copilot and Claude Code.
+A production-ready collection of **41 agents**, **56 skills**, **10 hooks**, **4 plugins**, and **23 prompts** for GitHub Copilot and Claude Code.
 
 > **Works with**: GitHub Copilot (VS Code) · Claude Code · Any AI assistant that reads `.agent.md` / `SKILL.md` files
 
@@ -155,6 +155,7 @@ ln -s $(pwd)/skills .github/skills
 | `@frontend-tests` | Vitest + RTL test writer (≥90% coverage) | Sonnet 4.5 |
 | `@e2e-tests` | Cypress E2E with strict Page Object Model | Sonnet 4.5 |
 | `@playwright-e2e` | Playwright E2E — cross-browser, accessibility | Sonnet 4.5 |
+| `@playwright-tdd` | Playwright TDD loop — RED→GREEN→REFACTOR→VERIFY with strict POM | Sonnet 4.6 |
 | `@migration` | EF Core migration specialist (rollback-safe) | Sonnet 4.5 |
 | `@k8s-deployer` | Kubernetes manifest generator and deployer | Sonnet 4.6 |
 | `@k8s-troubleshoot` | Kubernetes cluster diagnostician | Sonnet 4.6 |
@@ -240,6 +241,7 @@ Frontend: @frontend → @frontend-tests + @e2e-tests (parallel) → @reviewer
 | `openapi-scaffold` | Server stubs + client SDKs from OpenAPI specs |
 | `performance-optimize` | Performance analysis for .NET and React |
 | `playwright-test-gen` | Playwright test spec generation |
+| `playwright-output` | Parse Playwright JSON/JUnit/HTML reports into typed result contracts |
 | `product-doc-gap-checker` | Documentation completeness auditor |
 | `product-flow-screenshots` | Automated screenshot flow generation |
 | `rate-limiting` | Rate limiting, throttling, circuit breaker patterns |

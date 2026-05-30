@@ -10,8 +10,10 @@ tools:
 model: 'Claude Sonnet 4.6 (copilot)'
 user-invocable: true
 handoffs:
-  - target: tdd-refactor
-    trigger: 'All tests passing'
+  - label: "🔵 Hand off to Refactor (clean up)"
+    agent: tdd-refactor
+    prompt: "All tests are passing. Refactor the implementation — remove duplication, improve naming, apply patterns — while keeping every test green."
+    send: true
 ---
 
 # TDD Green Agent

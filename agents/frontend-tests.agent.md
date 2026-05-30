@@ -11,8 +11,8 @@ tools:
   - todo
   - vscode/memory
   - vscode/askQuestions
-  - jira-azure/jira_get_issue
-  - jira-azure/jira_search_issues
+  - jira-azure/get_issue
+  - jira-azure/search_issues
 
 user-invocable: true
 model: 'Claude Sonnet 4.5 (copilot)'
